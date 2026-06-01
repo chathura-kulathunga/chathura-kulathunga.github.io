@@ -1,17 +1,58 @@
 ---
+import { sanityClient } from 'sanity:client';
+import imageUrlBuilder from '@sanity/image-url';
 
+// This tells Sanity how to build the perfect image URL
+const builder = imageUrlBuilder(sanityClient);
+function urlFor(source: any) {
+  return builder.image(source);
+}
+
+const projects = await sanityClient.fetch(`*[_type == "softwareProject"]`);
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Vault</title>
+  </head>
+  <body style="background-color: #111; color: white; padding: 2rem; font-family: sans-serif;">
+    
+    <h1>Command Center: Software Projects</h1>
+    
+    <ul style="list-style: none; padding: 0;">
+      {projects.map((project: any) => (
+        <li style="border: 1px solid #333; padding: 1.5rem; margin-bottom: 2rem; border-radius: 8px; max-width: 600px;">
+          
+          <h2 style="margin-top: 0;">{project.title}</h2>
+
+          {/* This renders your cover image if you uploaded one! */}
+          {project.mainImage && (
+            <img 
+              src={urlFor(project.mainImage).width(800).url()} 
+              alt="Project Cover" 
+              style="width: 100%; border-radius: 8px; margin-bottom: 1rem;"
+            />
+          )}
+          
+          <div style="margin-bottom: 1rem;">
+            {project.techStack && project.techStack.map((tech: string) => (
+              <span style="background: #333; padding: 4px 10px; border-radius: 4px; margin-right: 8px; font-size: 0.85rem; color: #aaa;">
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <p style="color: #ccc; line-height: 1.5;">{project.description}</p>
+          
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" style="color: #fff; text-decoration: underline; margin-top: 1rem; display: inline-block;">
+              View Repository →
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+
+  </body>
 </html>
