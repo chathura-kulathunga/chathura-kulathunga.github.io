@@ -1,2 +1,7 @@
 @import "tailwindcss";
+
+/* This is the crucial line for v4 Dark Mode! */
 @custom-variant dark (&:where(.dark, .dark *));
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

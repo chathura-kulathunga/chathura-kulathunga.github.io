@@ -8,154 +8,220 @@ function urlFor(source: any) {
   return builder.image(source);
 }
 
-// Fetch ALL databases!
 const projects = await sanityClient.fetch(`*[_type == "softwareProject"]`);
 const labs = await sanityClient.fetch(`*[_type == "cyberLab"]`);
-// Order the Dojo events by date descending (newest first)
 const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order(date desc)`);
 ---
 
-<Layout title="The Vault | Chathura Kulathunga">
+<Layout>
   
-  <div class="max-w-7xl mx-auto px-8 md:px-16 py-12">
+  {/* ========================================= */}
+  {/* FIGMA-STYLE SPLIT HERO SECTION            */}
+  {/* ========================================= */}
+  <section class="relative w-full min-h-[85vh] flex flex-col md:flex-row overflow-hidden -mt-28 pt-28 border-b border-zinc-200/50 dark:border-zinc-800/50">
     
-    {/* ========================================= */}
-    {/* SECTION 1: SOFTWARE ENGINEERING           */}
-    {/* ========================================= */}
-    <header class="mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-8 transition-colors duration-500">
-      <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white tracking-tight transition-colors duration-500">Software Vault.</h1>
-      <p class="text-zinc-500 dark:text-zinc-500 mt-2 text-lg transition-colors duration-500">Engineering & Development Architecture</p>
-    </header>
+    <div class="w-full md:w-1/2 bg-[#F5F5F5] dark:bg-[#1A1A1A] flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16 transition-colors duration-500 z-10">
+      <div class="mb-16">
+        <svg class="w-10 h-10 text-zinc-900 dark:text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <p class="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-200 mb-2">Hi, I am</p>
+        <h1 class="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white tracking-tight mb-2">Chathura<br/>Kulathunga</h1>
+        <p class="text-lg md:text-xl font-bold text-zinc-400 dark:text-zinc-500 mb-12">Software Engineer // Shotokan Sensei</p>
+        <div class="flex gap-4">
+          <a href="#" class="w-12 h-12 bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center rounded text-zinc-900 dark:text-white hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="https://github.com/chathura-kulathunga" target="_blank" class="w-12 h-12 bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center rounded text-zinc-900 dark:text-white hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          <a href="#" class="w-12 h-12 bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center rounded text-zinc-900 dark:text-white hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full md:w-[60%] bg-[#121212] flex items-end justify-center relative min-h-125 md:min-h-0 z-0 md:ml-[-10%]" style="clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);">
+      <img src="/Chathura-Kulathunga-2025.jpg" alt="Chathura Kulathunga" class="absolute bottom-0 w-[80%] md:w-[70%] lg:w-[60%] max-w-2xl object-contain drop-shadow-2xl z-20" />
+    </div>
+
+  </section>
+
+  {/* ========================================= */}
+  {/* THE DYNAMIC CONTENT VIEWS                 */}
+  {/* ========================================= */}
+  <section class="max-w-7xl mx-auto px-6 md:px-12 py-24" id="content-container">
     
-    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
-      {projects.map((project: any) => (
-        <li class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-400 dark:hover:border-zinc-500 transition-all duration-500 shadow-xl flex flex-col relative">
-          
-          {project.mainImage && (
-            <a href={`/project/${project.slug?.current}`} class="w-full h-56 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 block">
-              <img 
-                src={urlFor(project.mainImage).width(800).height(500).url()} 
-                alt="Project Cover" 
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+    <div id="view-default" class="content-view text-center">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">The Master Vault.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Select a discipline from the navigation bar above to view the architecture.</p>
+    </div>
+
+    <div id="view-software" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Software Architecture.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Enterprise-grade systems, full-stack web applications, and React Native mobile deployments.</p>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+        {projects.map((item: any) => (
+          <li class="group cursor-pointer">
+            <a href={`/project/${item.slug?.current}`} class="block w-full">
+              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm">
+                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
+                {item.mainImage && (
+                  <img src={urlFor(item.mainImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                )}
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 block">Software</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.executiveSummary || "View full system documentation."}</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-32 transition-all duration-700 ease-out"></div>
+              </div>
             </a>
-          )}
-          
-          <div class="p-6 flex flex-col grow">
-            <a href={`/project/${project.slug?.current}`}>
-              <h2 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors duration-500">{project.title}</h2>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div id="view-cybersecurity" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Offensive Security.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Vulnerability research, network penetration testing, and ethical hacking lab reports.</p>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+        {labs.map((item: any) => (
+          <li class="group cursor-pointer">
+            <a href={`/labs/${item.slug?.current}`} class="block w-full">
+              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm border border-red-500/10">
+                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
+                {item.coverImage && (
+                  <img src={urlFor(item.coverImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale" />
+                )}
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-red-500 mb-3 block">Cybersec</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-red-500 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.description || "View full vulnerability report."}</p>
+                <div class="h-0.5 w-12 bg-red-500 group-hover:w-32 transition-all duration-700 ease-out"></div>
+              </div>
             </a>
-            
-            <div class="flex flex-wrap gap-2 mb-4 shrink-0">
-              {project.techStack && project.techStack.map((tech: string) => (
-                <span class="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 px-3 py-1 rounded-md text-xs font-semibold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider transition-colors duration-500">
-                  {tech}
-                </span>
-              ))}
-            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-            <p class="text-zinc-600 dark:text-zinc-400 mb-6 leading-relaxed shrink-0 transition-colors duration-500">
-              {project.description}
-            </p>
-            
-            <div class="mt-auto pt-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center transition-colors duration-500">
-              <a href={`/project/${project.slug?.current}`} class="inline-flex items-center text-sm font-bold text-zinc-900 dark:text-white hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-500">
-                Read Case Study →
-              </a>
-              {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" class="inline-flex items-center text-sm font-semibold text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors duration-500">
-                  GitHub ↗
-                </a>
-              )}
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-
-    {/* ========================================= */}
-    {/* SECTION 2: CYBERSECURITY LABS             */}
-    {/* ========================================= */}
-    <header class="mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-8 transition-colors duration-500">
-      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white tracking-tight transition-colors duration-500">Cybersecurity Labs.</h2>
-      <p class="text-zinc-500 dark:text-zinc-500 mt-2 text-lg transition-colors duration-500">Vulnerability Research & Network Analysis</p>
-    </header>
-
-    <ul class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-      {labs.map((lab: any) => (
-        <li class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:border-red-400 dark:hover:border-red-500 transition-all duration-500 shadow-xl flex flex-col relative">
-          
-          <div class="p-6 flex flex-col grow">
-            <a href={`/labs/${lab.slug?.current}`}>
-              <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 hover:text-red-600 dark:hover:text-red-400 transition-colors duration-500">{lab.title}</h3>
+    <div id="view-sports" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Shotokan Karate.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">1st Dan grading records, milestone ceremonies, and active Sensei progression.</p>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+        {milestones.map((item: any) => (
+          <li class="group cursor-pointer">
+            <a href={`/dojo/${item.slug?.current}`} class="block w-full">
+              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm">
+                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
+                {item.coverImage && (
+                  <img src={urlFor(item.coverImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                )}
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 block">Sports</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4">View 1st Dan milestone records inside.</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-32 transition-all duration-700 ease-out"></div>
+              </div>
             </a>
-            
-            <div class="flex flex-wrap gap-2 mb-4 shrink-0">
-              {lab.toolsUsed && lab.toolsUsed.map((tool: string) => (
-                <span class="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 px-3 py-1 rounded-md text-xs font-bold text-red-700 dark:text-red-400 uppercase tracking-wider transition-colors duration-500">
-                  {tool}
-                </span>
-              ))}
-            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-            <p class="text-zinc-600 dark:text-zinc-400 mb-6 leading-relaxed shrink-0 transition-colors duration-500">
-              {lab.executiveSummary}
-            </p>
-            
-            <div class="mt-auto pt-6 border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-500">
-              <a href={`/labs/${lab.slug?.current}`} class="inline-flex items-center text-sm font-bold text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors duration-500">
-                View Lab Report →
-              </a>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div id="view-robotics" class="content-view hidden text-center py-24">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Hardware Engineering.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    </div>
+    <div id="view-music" class="content-view hidden text-center py-24">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Audio Engineering.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    </div>
+    <div id="view-psychology" class="content-view hidden text-center py-24">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Behavioral Science.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    </div>
 
-    {/* ========================================= */}
-    {/* SECTION 3: THE DOJO                       */}
-    {/* ========================================= */}
-    <header class="mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-8 transition-colors duration-500">
-      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white tracking-tight transition-colors duration-500">The Dojo.</h2>
-      <p class="text-zinc-500 dark:text-zinc-500 mt-2 text-lg transition-colors duration-500">Shotokan Karate // 1st Dan Records</p>
-    </header>
+  </section>
 
-    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {milestones.map((milestone: any) => (
-        <li class="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:border-amber-400 dark:hover:border-amber-500 transition-all duration-500 shadow-xl flex flex-col relative">
-          
-          {milestone.coverImage && (
-            <a href={`/dojo/${milestone.slug?.current}`} class="w-full h-48 overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 block">
-              <img 
-                src={urlFor(milestone.coverImage).width(600).height(400).url()} 
-                alt="Milestone Cover" 
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0"
-              />
-            </a>
-          )}
-          
-          <div class="p-6 flex flex-col grow">
-            
-            {milestone.date && (
-              <span class="text-amber-600 dark:text-amber-500 font-bold uppercase tracking-widest text-xs mb-3">
-                {new Date(milestone.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-              </span>
-            )}
-            
-            <a href={`/dojo/${milestone.slug?.current}`}>
-              <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-500">{milestone.title}</h3>
-            </a>
-            
-            <div class="mt-auto pt-6 border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-500">
-              <a href={`/dojo/${milestone.slug?.current}`} class="inline-flex items-center text-sm font-bold text-amber-600 dark:text-amber-500 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-500">
-                View Milestone →
-              </a>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
+  {/* ========================================= */}
+  {/* SESSION MEMORY ENGINE                     */}
+  {/* ========================================= */}
+  <script>
+    const setupNavFilters = () => {
+      const navLinks = document.querySelectorAll('.filter-nav-link');
+      const allViews = document.querySelectorAll('.content-view');
+      const contentContainer = document.getElementById('content-container');
 
-  </div>
+      const activateView = (targetCategory: string, smoothScroll = true) => {
+        const validCategories = ['default', 'software', 'robotics', 'cybersecurity', 'sports', 'music', 'psychology'];
+        const safeCategory = validCategories.includes(targetCategory) ? targetCategory : 'default';
+
+        // 1. Swap Navbar Styles
+        navLinks.forEach(btn => {
+          btn.classList.remove('text-zinc-900', 'dark:text-white');
+          btn.classList.add('text-zinc-500');
+          if (btn.getAttribute('data-target') === safeCategory) {
+             btn.classList.remove('text-zinc-500');
+             btn.classList.add('text-zinc-900', 'dark:text-white');
+          }
+        });
+
+        // 2. Hide all content views
+        allViews.forEach(view => {
+           view.classList.add('hidden');
+        });
+
+        // 3. Un-hide the specific category
+        const activeView = document.getElementById(`view-${safeCategory}`);
+        if (activeView) {
+           activeView.classList.remove('hidden');
+           activeView.style.opacity = '0';
+           setTimeout(() => { 
+             activeView.style.opacity = '1'; 
+             activeView.style.transition = 'opacity 0.4s ease-in'; 
+           }, 10);
+        }
+        
+        // 4. Save to Session Memory!
+        sessionStorage.setItem('vaultActiveTab', safeCategory);
+        
+        // 5. Smooth Scroll
+        if(contentContainer && smoothScroll && safeCategory !== 'default') {
+           setTimeout(() => {
+             const yOffset = contentContainer.getBoundingClientRect().top + window.scrollY - 100;
+             window.scrollTo({ top: yOffset, behavior: 'smooth' });
+           }, 50);
+        }
+      };
+
+      // --- A. ON LOAD: READ THE MEMORY ---
+      // This is what makes the Back arrow work natively!
+      const savedTab = sessionStorage.getItem('vaultActiveTab') || 'default';
+      activateView(savedTab, false);
+
+      // --- B. ON CLICK: UPDATE MEMORY & VIEW ---
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          // Because these are buttons now, NO default-prevention is needed!
+          const targetCategory = link.getAttribute('data-target');
+          if (targetCategory) {
+             activateView(targetCategory, true);
+          }
+        });
+      });
+
+      // --- C. LISTEN FOR HOME RESET EVENT ---
+      window.addEventListener('vaultHomeReset', () => {
+         activateView('default', false);
+      });
+    };
+
+    document.addEventListener('astro:page-load', setupNavFilters);
+  </script>
 
 </Layout>
