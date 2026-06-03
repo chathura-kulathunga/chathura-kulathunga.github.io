@@ -1,0 +1,171 @@
+---
+import { sanityClient } from 'sanity:client';
+import imageUrlBuilder from '@sanity/image-url';
+import Layout from '../layouts/Layout.astro'; 
+
+const builder = imageUrlBuilder(sanityClient);
+function urlFor(source: any) {
+  return builder.image(source);
+}
+
+const projects = await sanityClient.fetch(`*[_type == "softwareProject"]`);
+const labs = await sanityClient.fetch(`*[_type == "cyberLab"]`);
+const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order(date desc)`);
+---
+
+<Layout title="The Vault | CK">
+  
+  <section class="max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32 min-h-screen" id="content-container">
+    
+    <div id="view-default" class="content-view text-center animate-fade-in mt-12">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">The Master Vault.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Select a discipline from the navigation bar above to load the architecture.</p>
+    </div>
+
+    <div id="view-software" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Software Architecture.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Enterprise-grade systems, full-stack web applications, and React Native mobile deployments.</p>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+        {projects.map((item: any) => (
+          <li class="group cursor-pointer">
+            <a href={`/project/${item.slug?.current}`} class="block w-full">
+              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm">
+                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
+                {item.mainImage && (
+                  <img src={urlFor(item.mainImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                )}
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 block">Software</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.executiveSummary || "View full system documentation."}</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-32 transition-all duration-700 ease-out"></div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div id="view-cybersecurity" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Offensive Security.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Vulnerability research, network penetration testing, and ethical hacking lab reports.</p>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+        {labs.map((item: any) => (
+          <li class="group cursor-pointer">
+            <a href={`/labs/${item.slug?.current}`} class="block w-full">
+              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm border border-red-500/10">
+                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
+                {item.coverImage && (
+                  <img src={urlFor(item.coverImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale" />
+                )}
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-red-500 mb-3 block">Cybersec</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-red-500 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.description || "View full vulnerability report."}</p>
+                <div class="h-0.5 w-12 bg-red-500 group-hover:w-32 transition-all duration-700 ease-out"></div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div id="view-sports" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Shotokan Karate.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">1st Dan grading records, milestone ceremonies, and active Sensei progression.</p>
+      </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
+        {milestones.map((item: any) => (
+          <li class="group cursor-pointer">
+            <a href={`/dojo/${item.slug?.current}`} class="block w-full">
+              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm">
+                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
+                {item.coverImage && (
+                  <img src={urlFor(item.coverImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                )}
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 block">Sports</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4">View 1st Dan milestone records inside.</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-32 transition-all duration-700 ease-out"></div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div id="view-robotics" class="content-view hidden text-center py-24">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Hardware Engineering.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    </div>
+    <div id="view-music" class="content-view hidden text-center py-24">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Audio Engineering.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    </div>
+    <div id="view-psychology" class="content-view hidden text-center py-24">
+       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Behavioral Science.</h2>
+       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    </div>
+
+  </section>
+
+  <script>
+    const setupVaultEngine = () => {
+      const allViews = document.querySelectorAll('.content-view');
+      const navLinks = document.querySelectorAll('.filter-nav-link');
+
+      const activateView = (targetCategory: string) => {
+        const validCategories = ['default', 'software', 'robotics', 'cybersecurity', 'sports', 'music', 'psychology'];
+        const safeCategory = validCategories.includes(targetCategory) ? targetCategory : 'default';
+
+        navLinks.forEach(btn => {
+          btn.classList.remove('text-zinc-900', 'dark:text-white');
+          btn.classList.add('text-zinc-500');
+          if (btn.getAttribute('data-target') === safeCategory) {
+             btn.classList.remove('text-zinc-500');
+             btn.classList.add('text-zinc-900', 'dark:text-white');
+          }
+        });
+
+        allViews.forEach(view => view.classList.add('hidden'));
+
+        const activeView = document.getElementById(`view-${safeCategory}`);
+        if (activeView) {
+           activeView.classList.remove('hidden');
+           activeView.style.opacity = '0';
+           setTimeout(() => { 
+             activeView.style.opacity = '1'; 
+             activeView.style.transition = 'opacity 0.4s ease-in'; 
+           }, 10);
+        }
+      };
+
+      // 1. Initialize view on load
+      const savedTab = sessionStorage.getItem('vaultActiveTab') || 'default';
+      activateView(savedTab);
+
+      // 2. Listen for clicks from the Global Nav Bar
+      window.addEventListener('vaultTabChange', (e: Event) => {
+         const customEvent = e as CustomEvent;
+         activateView(customEvent.detail);
+      });
+    };
+
+    document.addEventListener('astro:page-load', setupVaultEngine);
+  </script>
+
+</Layout>
+
+<style>
+  .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+</style>

@@ -4,20 +4,16 @@ import { ClientRouter } from 'astro:transitions';
 
 const { title = "CK // Vault" } = Astro.props;
 
-// Bulletproof check: Are we on the homepage?
 const pathname = Astro.url.pathname;
-const isHome = pathname === '/' || pathname === '/index.html' || pathname === '';
+// Show filters on Home AND the new Vault page
+const showFilters = pathname === '/' || pathname === '/index.html' || pathname === '' || pathname.startsWith('/vault');
 ---
 
-{/* Removed the hardcoded style from here! */}
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    {/* Explicitly tell browsers we support both, but we will control it via JS */}
     <meta name="color-scheme" content="light dark" />
-    
     <title>{title}</title>
     <ClientRouter />
     
@@ -25,7 +21,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     
-    {/* UPGRADED: Dynamically syncs the browser's native engine with our Tailwind engine */}
     <script is:inline>
       const applyTheme = () => {
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme') === 'light') {
@@ -47,9 +42,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
   
   <body class="bg-[#F8F9FA] text-zinc-900 dark:bg-[#121212] dark:text-zinc-200 antialiased min-h-screen flex flex-col transition-colors duration-500 overflow-x-hidden">
     
-    {/* ========================================= */}
-    {/* FIGMA-GRADE MASTER HEADER                 */}
-    {/* ========================================= */}
     <nav class="w-full fixed top-0 z-40 bg-[#F8F9FA]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-500">
       <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between">
         
@@ -63,18 +55,19 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
         
         <div class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
           
-          {isHome && (
+          {/* THESE ARE NOW LINKS TO THE VAULT */}
+          {showFilters && (
             <>
-              <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</button>
-              <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="robotics">Robotics</button>
-              <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="cybersecurity">Cybersec</button>
-              <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="sports">Sports</button>
-              <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="music">Music</button>
-              <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="psychology">Psychology</button>
+              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</a>
+              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="robotics">Robotics</a>
+              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="cybersecurity">Cybersec</a>
+              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="sports">Sports</a>
+              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="music">Music</a>
+              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="psychology">Psychology</a>
             </>
           )}
 
-          {isHome && <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-2"></div>}
+          {showFilters && <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-2"></div>}
           
           <a href="/about" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
           <a href="/contact" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
@@ -87,9 +80,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
       </div>
     </nav>
 
-    {/* ========================================= */}
-    {/* MOBILE SLIDING DRAWER                     */}
-    {/* ========================================= */}
     <div id="mobile-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
     
     <div id="mobile-drawer" class="fixed top-0 left-0 w-64 h-full bg-[#F8F9FA] dark:bg-[#121212] z-50 transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col border-r border-zinc-200/50 dark:border-zinc-800/50">
@@ -109,51 +99,39 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
         <a href="/about" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
         <a href="/contact" class={`global-nav-link border-b border-zinc-200/50 dark:border-zinc-800/50 pb-6 mb-2 hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
         
-        {isHome && (
+        {showFilters && (
           <>
-            <button class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</button>
-            <button class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="robotics">Robotics</button>
-            <button class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="cybersecurity">Cybersec</button>
-            <button class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="sports">Sports</button>
-            <button class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="music">Music</button>
-            <button class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="psychology">Psychology</button>
+            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</a>
+            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="robotics">Robotics</a>
+            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="cybersecurity">Cybersec</a>
+            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="sports">Sports</a>
+            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="music">Music</a>
+            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="psychology">Psychology</a>
           </>
         )}
       </div>
       
     </div>
 
-    {/* Main Content Area */}
     <main class="grow w-full pt-28 z-0 relative">
       <slot />
     </main>
 
-    {/* ========================================= */}
-    {/* GLOBAL MASTER FOOTER                      */}
-    {/* ========================================= */}
     <footer class="w-full relative overflow-hidden bg-white dark:bg-[#0A0A0A] border-t border-zinc-200/50 dark:border-zinc-800/50 pt-15 pb-10 transition-colors duration-500 mt-auto z-10">
-      
       <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full overflow-hidden pointer-events-none select-none opacity-[0.03] dark:opacity-[0.02] flex justify-center z-0">
         <span class="text-[18vw] font-black tracking-tighter leading-none whitespace-nowrap text-zinc-900 dark:text-white">
           CHATHURA
         </span>
       </div>
-
       <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row justify-between gap-16 md:gap-8">
-        
         <div class="flex flex-col items-start max-w-sm">
-          <a href="/" class="text-zinc-900 dark:text-white font-black tracking-[0.3em] uppercase text-xl mb-6 hover:opacity-70 transition-opacity">
-            CK // Vault
-          </a>
-          <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed mb-8">
-            Engineered logic. Behavioral design. Shotokan discipline. Built from the ground up for absolute precision.
-          </p>
+          <a href="/" class="text-zinc-900 dark:text-white font-black tracking-[0.3em] uppercase text-xl mb-6 hover:opacity-70 transition-opacity">CK // Vault</a>
+          <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed mb-8">Engineered logic. Behavioral design. Shotokan discipline. Built from the ground up for absolute precision.</p>
           <div class="flex items-center gap-3 text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-900 dark:text-zinc-500">
             <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
             All Systems Operational
           </div>
         </div>
-
         <div class="flex gap-16 md:gap-24">
           <div class="flex flex-col gap-5 text-xs font-bold tracking-[0.2em] uppercase">
             <h4 class="text-zinc-900 dark:text-white mb-2 border-b border-zinc-200 dark:border-zinc-800 pb-4">Sitemap</h4>
@@ -161,7 +139,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
             <a href="/about" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">The Architect</a>
             <a href="/contact" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a>
           </div>
-          
           <div class="flex flex-col gap-5 text-xs font-bold tracking-[0.2em] uppercase">
             <h4 class="text-zinc-900 dark:text-white mb-2 border-b border-zinc-200 dark:border-zinc-800 pb-4">Network</h4>
             <a href="https://github.com/chathura-kulathunga" target="_blank" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">GitHub</a>
@@ -169,27 +146,19 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
             <a href="https://instagram.com/" target="_blank" class="text-zinc-500 hover:text-[#E1306C] transition-colors">Instagram</a>
           </div>
         </div>
-
       </div>
-
       <div class="max-w-7xl mx-auto px-6 md:px-12 mt-20 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-500 relative z-10 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-8">
         <p>© {new Date().getFullYear()} Chathura Kulathunga. All Rights Reserved.</p>
-        
         <button id="back-to-top" class="hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-3 group cursor-pointer">
           <span class="w-8 h-px bg-zinc-400 group-hover:bg-zinc-900 dark:group-hover:bg-white transition-colors"></span>
           Back To Top
           <svg class="w-4 h-4 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
         </button>
       </div>
-
     </footer>
 
-    {/* ========================================= */}
-    {/* UNIFIED JAVASCRIPT ENGINE                 */}
-    {/* ========================================= */}
     <script>
       const setupLayoutScripts = () => {
-        // --- 1. MOBILE MENU LOGIC ---
         const openBtn = document.getElementById('mobile-menu-open');
         const closeBtn = document.getElementById('mobile-menu-close');
         const drawer = document.getElementById('mobile-drawer');
@@ -228,7 +197,23 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
         homeBtn?.addEventListener('click', triggerHomeReset);
         desktopHome?.addEventListener('click', triggerHomeReset);
 
-        [...navLinks, ...globalLinks].forEach(link => {
+        // UPGRADED NAV LOGIC: Handles cross-page memory swapping!
+        navLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            // FIX: Added `|| 'default'` to guarantee a string for TypeScript!
+            const targetCategory = link.getAttribute('data-target') || 'default';
+            sessionStorage.setItem('vaultActiveTab', targetCategory);
+     
+            // If we are ALREADY on the vault page, don't reload. Just swap views!
+            if (window.location.pathname === '/vault' || window.location.pathname === '/vault/') {
+              e.preventDefault();
+              window.dispatchEvent(new CustomEvent('vaultTabChange', { detail: targetCategory }));
+            }  
+            if (window.innerWidth < 768) closeMenu();
+          });
+        });
+
+        globalLinks.forEach(link => {
           link.addEventListener('click', () => {
              if (window.innerWidth < 768) closeMenu();
           });
@@ -238,13 +223,11 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
             if (window.innerWidth >= 768) closeMenu();
         });
 
-        // --- 2. BACK TO TOP LOGIC ---
         const backToTopBtn = document.getElementById('back-to-top');
         backToTopBtn?.addEventListener('click', () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // --- 3. MULTI-BUTTON THEME LOGIC ---
         const themeButtons = document.querySelectorAll('.theme-toggle-btn');
         const updateIcons = () => {
           const isDark = document.documentElement.classList.contains("dark");
@@ -254,7 +237,7 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
               if (isDark) {
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
               } else {
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
               }
             }
           });
@@ -265,10 +248,7 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
             document.documentElement.classList.toggle("dark");
             const isDark = document.documentElement.classList.contains("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
-            
-            // UPGRADED: Force the browser color-scheme to update immediately!
             document.documentElement.style.colorScheme = isDark ? "dark" : "light";
-            
             updateIcons();
           });
         });
