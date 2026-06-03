@@ -2,67 +2,119 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="The Architect | Chathura Kulathunga">
+<Layout title="The Architect | CK Vault">
   
-  <div class="max-w-4xl mx-auto px-8 md:px-16 py-16">
+  <div class="max-w-4xl mx-auto px-6 md:px-12 py-16 md:py-24">
     
-    {/* Hero Section */}
-    <header class="mb-16 border-b border-zinc-200 dark:border-zinc-800 pb-12 transition-colors duration-500">
-      <h1 class="text-5xl md:text-7xl font-bold text-zinc-900 dark:text-white tracking-tight mb-4 transition-colors duration-500">
-        Chathura Kulathunga.
-      </h1>
-      <p class="text-xl text-zinc-600 dark:text-zinc-400 font-medium tracking-wide transition-colors duration-500">
-        Software Engineer // 1st Dan Shotokan Sensei // Hardware Architect
-      </p>
-    </header>
+    {/* ========================================= */}
+    {/* ABOUT ME SECTION                          */}
+    {/* ========================================= */}
+    <div class="flex flex-col items-center text-center animate-fade-in">
+      
+      {/* Boxed Header */}
+      <div class="border-4 border-zinc-900 dark:border-white px-8 py-4 mb-12 inline-block">
+        <h1 class="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase">
+          The Architect
+        </h1>
+      </div>
 
-    {/* The Mindset */}
-    <section class="mb-16">
-      <h2 class="text-2xl font-bold text-zinc-900 dark:text-white mb-6 uppercase tracking-widest transition-colors duration-500">I. The Mindset</h2>
-      <div class="prose max-w-none text-zinc-700 dark:text-zinc-300 leading-relaxed transition-colors duration-500 text-lg">
-        <p class="mb-6">
-          Engineering is not just about writing syntax; it is about understanding the human element behind the screen. My approach to architecture bridges the gap between deep technical software engineering and behavioral psychology. Whether I am analyzing network vulnerabilities or designing user interfaces, the goal is always to build systems that feel instinctively powerful.
+      {/* Bio Text */}
+      <div class="text-zinc-600 dark:text-zinc-400 font-medium leading-loose md:text-lg max-w-3xl space-y-6 text-justify md:text-center">
+        <p>
+          My name is <span class="text-zinc-900 dark:text-white font-bold">Chathura Kulathunga</span>. I am a 22-year-old Software Engineering undergraduate based in Sri Lanka, driven by a deep fascination with how complex systems operate—both in silicon and in the human mind.
         </p>
         <p>
-          I operate on a philosophy of clean aesthetics, calculated precision, and absolute discipline. 
+          Beyond writing code, I am a <span class="text-zinc-900 dark:text-white font-bold">1st Dan Black Belt and Shotokan Karate Sensei</span>. The discipline required in the dojo directly translates to my architecture: precise, deliberate, and engineered for impact. Whether I am building enterprise-grade applications, exploring offensive cybersecurity vectors, or analyzing behavioral psychology, my approach remains the same.
+        </p>
+        <p class="italic text-sm">
+          "Clean, classy, and relentlessly efficient."
         </p>
       </div>
-    </section>
 
-    {/* The Disciplines Grid */}
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+      {/* Button */}
+      <div class="mt-16 flex items-center justify-center gap-6 group cursor-pointer">
+        <div class="h-8 w-0.5 bg-zinc-900 dark:bg-white group-hover:scale-y-150 transition-transform duration-300"></div>
+        <a href="/" class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase group-hover:opacity-70 transition-opacity">
+          Explore The Vault
+        </a>
+        <div class="h-8 w-0.5 bg-zinc-900 dark:bg-white group-hover:scale-y-150 transition-transform duration-300"></div>
+      </div>
+
+    </div>
+
+    {/* ========================================= */}
+    {/* FIGMA DIVIDER - h-[2px] swapped for h-0.5 */}
+    {/* ========================================= */}
+    <div class="flex items-center justify-center gap-4 my-24 opacity-60">
+      <div class="h-0.5 w-16 bg-zinc-900 dark:bg-white"></div>
+      <div class="flex gap-1 text-zinc-900 dark:text-white font-black tracking-tighter transform -skew-x-12 text-xl">\\\\//</div>
+      <div class="h-0.5 w-16 bg-zinc-900 dark:bg-white"></div>
+    </div>
+
+    {/* ========================================= */}
+    {/* SKILLS SECTION                            */}
+    {/* ========================================= */}
+    <div class="flex flex-col items-center animate-fade-in pb-12">
       
-      {/* Software & Cyber */}
-      <div class="p-8 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl transition-colors duration-500">
-        <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 transition-colors duration-500">Digital Architecture</h3>
-        <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 transition-colors duration-500">
-          <li class="flex items-center gap-2"><span class="text-yellow-500">✦</span> Full-Stack Development (Java, PHP, MERN)</li>
-          <li class="flex items-center gap-2"><span class="text-yellow-500">✦</span> Mobile Engineering (React Native, Flutter)</li>
-          <li class="flex items-center gap-2"><span class="text-yellow-500">✦</span> Offensive Security & Ethical Hacking</li>
-          <li class="flex items-center gap-2"><span class="text-yellow-500">✦</span> Owner @ InnoVision Labs</li>
-        </ul>
+      {/* Boxed Header */}
+      <div class="border-4 border-zinc-900 dark:border-white px-8 py-4 mb-16 inline-block">
+        <h2 class="text-xl md:text-2xl font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase">
+          Arsenal
+        </h2>
       </div>
 
-      {/* Physical & Hardware */}
-      <div class="p-8 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl transition-colors duration-500">
-        <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-4 transition-colors duration-500">Physical Execution</h3>
-        <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 transition-colors duration-500">
-          <li class="flex items-center gap-2"><span class="text-red-500">✦</span> 1st Dan Black Belt (Shotokan Karate)</li>
-          <li class="flex items-center gap-2"><span class="text-red-500">✦</span> Active Dojo Sensei</li>
-          <li class="flex items-center gap-2"><span class="text-red-500">✦</span> Hardware Prototyping (VELOX Food Service Robot)</li>
-          <li class="flex items-center gap-2"><span class="text-red-500">✦</span> Automotive Enthusiast (W124 E500, WRX STI)</li>
-        </ul>
+      <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
+        
+        {/* Core Stack */}
+        <div>
+          <h3 class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase mb-8">Active Stack</h3>
+          <ul class="space-y-4 text-zinc-500 dark:text-zinc-400 font-bold text-sm tracking-widest uppercase">
+            <li>Java</li>
+            <li>PHP</li>
+            <li>JavaScript</li>
+            <li>MySQL</li>
+            <li>Tailwind CSS</li>
+          </ul>
+        </div>
+
+        {/* Learning */}
+        <div>
+          <h3 class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase mb-8">Exploring</h3>
+          <ul class="space-y-4 text-zinc-500 dark:text-zinc-400 font-bold text-sm tracking-widest uppercase">
+            <li>MERN Stack</li>
+            <li>React Native</li>
+            <li>Flutter</li>
+            <li>Kali Linux</li>
+            <li>Burp Suite</li>
+          </ul>
+        </div>
+
+        {/* Disciplines */}
+        <div>
+          <h3 class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase mb-8">Disciplines</h3>
+          <ul class="space-y-4 text-zinc-500 dark:text-zinc-400 font-bold text-sm tracking-widest uppercase">
+            <li>Software Arch.</li>
+            <li>Offensive Security</li>
+            <li>Shotokan Do</li>
+            <li>Psychology</li>
+            <li>Robotics (VELOX)</li>
+          </ul>
+        </div>
+
       </div>
 
-    </section>
-
-    {/* Contact / Closing */}
-    <section class="border-t border-zinc-200 dark:border-zinc-800 pt-12 transition-colors duration-500">
-      <p class="text-zinc-500 font-bold uppercase tracking-widest text-sm mb-6">Status // Available for collaboration</p>
-      <a href="mailto:chathurakulathunga.foxc@gmail.com" class="inline-flex items-center px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-black font-bold rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors duration-500">
-        Initiate Contact
-      </a>
-    </section>
+    </div>
 
   </div>
+
 </Layout>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
