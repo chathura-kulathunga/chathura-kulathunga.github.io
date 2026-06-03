@@ -16,17 +16,18 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
 <Layout>
   
   {/* ========================================= */}
-  {/* FIGMA-STYLE SPLIT HERO SECTION            */}
+  {/* OPTIMIZED SPLIT HERO ARCHITECTURE         */}
   {/* ========================================= */}
-  <section class="relative w-full min-h-[85vh] flex flex-col md:flex-row overflow-hidden -mt-28 pt-28 border-b border-zinc-200/50 dark:border-zinc-800/50">
+  <section class="relative w-full min-h-[90vh] flex flex-col md:flex-row overflow-hidden -mt-28 pt-28 border-b border-zinc-200/50 dark:border-zinc-800/50">
     
-    <div class="w-full md:w-1/2 bg-[#F5F5F5] dark:bg-[#1A1A1A] flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16 transition-colors duration-500 z-10">
+    {/* Left Side: Content */}
+    <div class="w-full md:w-1/2 bg-[#F5F5F5] dark:bg-[#1A1A1A] flex flex-col justify-center px-8 md:px-16 lg:px-24 py-20 md:py-16 transition-colors duration-500 z-10">
       <div class="mb-16">
         <svg class="w-10 h-10 text-zinc-900 dark:text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
       <div>
         <p class="text-xl md:text-2xl font-semibold text-zinc-800 dark:text-zinc-200 mb-2">Hi, I am</p>
-        <h1 class="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white tracking-tight mb-2">Chathura<br/>Kulathunga</h1>
+        <h1 class="text-5xl md:text-7xl font-black text-zinc-900 dark:text-white tracking-tight mb-2 leading-tight">Chathura<br/>Kulathunga</h1>
         <p class="text-lg md:text-xl font-bold text-zinc-400 dark:text-zinc-500 mb-12">Software Engineer // Shotokan Sensei</p>
         <div class="flex gap-4">
           <a href="#" class="w-12 h-12 bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center rounded text-zinc-900 dark:text-white hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
@@ -36,8 +37,14 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
       </div>
     </div>
 
-    <div class="w-full md:w-[60%] bg-[#121212] flex items-end justify-center relative min-h-125 md:min-h-0 z-0 md:ml-[-10%]" style="clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);">
-      <img src="/chathura-kulathunga-2025b.jpg" alt="Chathura Kulathunga" class="absolute bottom-0 w-[80%] md:w-[70%] lg:w-[60%] max-w-2xl object-contain drop-shadow-2xl z-20" />
+    {/* Right Side: Optimized Image Wrapper */}
+    {/* Right Side: Optimized Image Wrapper */}
+    <div class="w-full md:w-[60%] bg-[#121212] flex items-end relative min-h-125 md:min-h-0 z-0 md:ml-[-10%] slanted-hero-box">
+      <img 
+        src="/Chathura-Kulathunga-2025.jpg" 
+        alt="Chathura Kulathunga" 
+        class="absolute bottom-0 right-0 md:right-[5%] lg:right-[8%] w-[90%] md:w-[85%] lg:w-[75%] max-w-2xl object-contain drop-shadow-3xl z-20" 
+      />
     </div>
 
   </section>
@@ -149,7 +156,7 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
   </section>
 
   {/* ========================================= */}
-  {/* SESSION MEMORY ENGINE                     */}
+  {/* THE STATE MEMORY & SCROLL ENGINE          */}
   {/* ========================================= */}
   <script>
     const setupNavFilters = () => {
@@ -161,7 +168,6 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
         const validCategories = ['default', 'software', 'robotics', 'cybersecurity', 'sports', 'music', 'psychology'];
         const safeCategory = validCategories.includes(targetCategory) ? targetCategory : 'default';
 
-        // 1. Swap Navbar Styles
         navLinks.forEach(btn => {
           btn.classList.remove('text-zinc-900', 'dark:text-white');
           btn.classList.add('text-zinc-500');
@@ -171,12 +177,10 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
           }
         });
 
-        // 2. Hide all content views
         allViews.forEach(view => {
            view.classList.add('hidden');
         });
 
-        // 3. Un-hide the specific category
         const activeView = document.getElementById(`view-${safeCategory}`);
         if (activeView) {
            activeView.classList.remove('hidden');
@@ -187,10 +191,8 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
            }, 10);
         }
         
-        // 4. Save to Session Memory!
         sessionStorage.setItem('vaultActiveTab', safeCategory);
         
-        // 5. Smooth Scroll
         if(contentContainer && smoothScroll && safeCategory !== 'default') {
            setTimeout(() => {
              const yOffset = contentContainer.getBoundingClientRect().top + window.scrollY - 100;
@@ -199,15 +201,11 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
         }
       };
 
-      // --- A. ON LOAD: READ THE MEMORY ---
-      // This is what makes the Back arrow work natively!
       const savedTab = sessionStorage.getItem('vaultActiveTab') || 'default';
       activateView(savedTab, false);
 
-      // --- B. ON CLICK: UPDATE MEMORY & VIEW ---
       navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-          // Because these are buttons now, NO default-prevention is needed!
           const targetCategory = link.getAttribute('data-target');
           if (targetCategory) {
              activateView(targetCategory, true);
@@ -215,7 +213,6 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
         });
       });
 
-      // --- C. LISTEN FOR HOME RESET EVENT ---
       window.addEventListener('vaultHomeReset', () => {
          activateView('default', false);
       });
@@ -225,3 +222,22 @@ const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order
   </script>
 
 </Layout>
+
+{/* Architectural CSS upgrade for the slanted hero */}
+<style>
+  .slanted-hero-box {
+    /* Standard vertical centering for mobile */
+    justify-content: center; 
+  }
+  @media (min-width: 768px) {
+    /* Figma-style slanted clip-path applied ONLY to desktop */
+    .slanted-hero-box {
+      justify-content: flex-end; /* Align the image content to the right visual edge */
+      clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+    }
+  }
+  /* High-end rendering fix */
+  .drop-shadow-3xl {
+    filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.4));
+  }
+</style>

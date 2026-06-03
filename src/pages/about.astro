@@ -4,22 +4,22 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="The Architect | CK Vault">
   
-  <div class="max-w-4xl mx-auto px-6 md:px-12 py-16 md:py-24">
+  <div class="max-w-5xl mx-auto px-6 md:px-12 py-12 md:py-1">
     
     {/* ========================================= */}
     {/* ABOUT ME SECTION                          */}
     {/* ========================================= */}
     <div class="flex flex-col items-center text-center animate-fade-in">
       
-      {/* Boxed Header */}
-      <div class="border-4 border-zinc-900 dark:border-white px-8 py-4 mb-12 inline-block">
+      {/* Boxed Header - Tightened mb-8 */}
+      <div class="border-4 border-zinc-900 dark:border-white px-8 py-4 mb-8 inline-block">
         <h1 class="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase">
           The Architect
         </h1>
       </div>
 
-      {/* Bio Text */}
-      <div class="text-zinc-600 dark:text-zinc-400 font-medium leading-loose md:text-lg max-w-3xl space-y-6 text-justify md:text-center">
+      {/* Bio Text - Tightened spacing */}
+      <div class="text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed md:text-lg max-w-3xl space-y-4 text-justify md:text-center">
         <p>
           My name is <span class="text-zinc-900 dark:text-white font-bold">Chathura Kulathunga</span>. I am a 22-year-old Software Engineering undergraduate based in Sri Lanka, driven by a deep fascination with how complex systems operate—both in silicon and in the human mind.
         </p>
@@ -31,76 +31,165 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </div>
 
-      {/* Button */}
-      <div class="mt-16 flex items-center justify-center gap-6 group cursor-pointer">
-        <div class="h-8 w-0.5 bg-zinc-900 dark:bg-white group-hover:scale-y-150 transition-transform duration-300"></div>
+      {/* Button - Tightened mt-10 */}
+      <div class="mt-10 flex items-center justify-center gap-6 group cursor-pointer">
+        <div class="h-8 w-px bg-zinc-900 dark:bg-white group-hover:scale-y-150 transition-transform duration-300"></div>
         <a href="/" class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase group-hover:opacity-70 transition-opacity">
           Explore The Vault
         </a>
-        <div class="h-8 w-0.5 bg-zinc-900 dark:bg-white group-hover:scale-y-150 transition-transform duration-300"></div>
+        <div class="h-8 w-px bg-zinc-900 dark:bg-white group-hover:scale-y-150 transition-transform duration-300"></div>
       </div>
 
     </div>
 
     {/* ========================================= */}
-    {/* FIGMA DIVIDER - h-[2px] swapped for h-0.5 */}
+    {/* FIGMA DIVIDER - COMPRESSED (my-12)        */}
     {/* ========================================= */}
-    <div class="flex items-center justify-center gap-4 my-24 opacity-60">
-      <div class="h-0.5 w-16 bg-zinc-900 dark:bg-white"></div>
-      <div class="flex gap-1 text-zinc-900 dark:text-white font-black tracking-tighter transform -skew-x-12 text-xl">\\\\//</div>
-      <div class="h-0.5 w-16 bg-zinc-900 dark:bg-white"></div>
+    <div class="flex items-center justify-center gap-4 my-12 opacity-40">
+      <div class="h-px w-12 bg-zinc-900 dark:bg-white"></div>
+      <div class="flex gap-1 text-zinc-900 dark:text-white font-black tracking-tighter transform -skew-x-12 text-lg">\\\\//</div>
+      <div class="h-px w-12 bg-zinc-900 dark:bg-white"></div>
     </div>
 
     {/* ========================================= */}
-    {/* SKILLS SECTION                            */}
+    {/* ARSENAL SECTION                           */}
     {/* ========================================= */}
-    <div class="flex flex-col items-center animate-fade-in pb-12">
+    <div class="flex flex-col items-center animate-fade-in pb-8">
       
-      {/* Boxed Header */}
-      <div class="border-4 border-zinc-900 dark:border-white px-8 py-4 mb-16 inline-block">
+      {/* Boxed Header - Tightened mb-12 */}
+      <div class="border-4 border-zinc-900 dark:border-white px-8 py-4 mb-12 inline-block">
         <h2 class="text-xl md:text-2xl font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase">
           Arsenal
         </h2>
       </div>
 
-      <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
+      {/* 3-Column Pillars - Tightened mb-8 */}
+      <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-8">
         
-        {/* Core Stack */}
-        <div>
-          <h3 class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase mb-8">Active Stack</h3>
-          <ul class="space-y-4 text-zinc-500 dark:text-zinc-400 font-bold text-sm tracking-widest uppercase">
-            <li>Java</li>
-            <li>PHP</li>
-            <li>JavaScript</li>
-            <li>MySQL</li>
-            <li>Tailwind CSS</li>
+        {/* COLUMN 1 */}
+        <div class="flex flex-col items-center bg-white dark:bg-[#121212] p-6 rounded-2xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
+          <h3 class="text-[10px] font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-3 w-full text-center">Core Systems</h3>
+          <ul class="grid grid-cols-2 gap-x-4 gap-y-6 w-full">
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Java</span>
+              <img src="/icons/java.png" alt="Java" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">C++</span>
+              <img src="/icons/c++.png" alt="C++" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Python</span>
+              <img src="/icons/python.png" alt="Python" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">PHP</span>
+              <img src="/icons/php.png" alt="PHP" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group col-span-2 mt-1">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Kali Linux</span>
+              <img src="/icons/kalilinux.png" alt="Kali Linux" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
           </ul>
         </div>
 
-        {/* Learning */}
-        <div>
-          <h3 class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase mb-8">Exploring</h3>
-          <ul class="space-y-4 text-zinc-500 dark:text-zinc-400 font-bold text-sm tracking-widest uppercase">
-            <li>MERN Stack</li>
-            <li>React Native</li>
-            <li>Flutter</li>
-            <li>Kali Linux</li>
-            <li>Burp Suite</li>
+        {/* COLUMN 2 */}
+        <div class="flex flex-col items-center bg-white dark:bg-[#121212] p-6 rounded-2xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
+          <h3 class="text-[10px] font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-3 w-full text-center">Web & Data</h3>
+          <ul class="grid grid-cols-2 gap-x-4 gap-y-6 w-full">
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">HTML5</span>
+              <img src="/icons/html5.png" alt="HTML5" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">CSS3</span>
+              <img src="/icons/css3.png" alt="CSS3" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">JS</span>
+              <img src="/icons/js.png" alt="JavaScript" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">TypeScript</span>
+              <img src="/icons/typescript.png" alt="TypeScript" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group col-span-2 mt-1">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">MySQL</span>
+              <img src="/icons/mysql.png" alt="MySQL" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
           </ul>
         </div>
 
-        {/* Disciplines */}
-        <div>
-          <h3 class="text-sm font-black text-zinc-900 dark:text-white tracking-[0.2em] uppercase mb-8">Disciplines</h3>
-          <ul class="space-y-4 text-zinc-500 dark:text-zinc-400 font-bold text-sm tracking-widest uppercase">
-            <li>Software Arch.</li>
-            <li>Offensive Security</li>
-            <li>Shotokan Do</li>
-            <li>Psychology</li>
-            <li>Robotics (VELOX)</li>
+        {/* COLUMN 3 */}
+        <div class="flex flex-col items-center bg-white dark:bg-[#121212] p-6 rounded-2xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
+          <h3 class="text-[10px] font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase mb-6 border-b border-zinc-200 dark:border-zinc-800 pb-3 w-full text-center">Edge & Mobile</h3>
+          <ul class="grid grid-cols-2 gap-x-4 gap-y-6 w-full">
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Android</span>
+              <img src="/icons/android.png" alt="Android" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Flutter</span>
+              <img src="/icons/flutter.png" alt="Flutter" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group mt-1">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Firebase</span>
+              <img src="/icons/firebase.png" alt="Firebase" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
+            <li class="flex flex-col items-center gap-2 group mt-1">
+              <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Arduino</span>
+              <img src="/icons/arduino.png" alt="Arduino" class="w-10 h-10 object-contain group-hover:-translate-y-1 transition-transform" />
+            </li>
           </ul>
         </div>
 
+      </div>
+
+      {/* FULL WIDTH BLOCK: The MERN Ecosystem (TIGHTENED mb-8) */}
+      <div class="md:col-span-3 flex flex-col items-center bg-white dark:bg-[#121212] p-8 rounded-2xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/50 transition-colors mb-8">
+        <h3 class="text-[10px] font-black text-zinc-900 dark:text-white tracking-[0.3em] uppercase mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-3 w-full md:w-1/2 text-center">The MERN Ecosystem</h3>
+        
+        <ul class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 w-full max-w-4xl mx-auto">
+          <li class="flex flex-col items-center gap-2 group">
+            <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">MongoDB</span>
+            <img src="/icons/mongodb.png" alt="MongoDB" class="w-12 h-12 object-contain group-hover:-translate-y-1 transition-transform" />
+          </li>
+          <li class="flex flex-col items-center gap-2 group">
+            <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Express</span>
+            <img src="/icons/express.png" alt="Express" class="w-12 h-12 object-contain group-hover:-translate-y-1 transition-transform dark:invert" />
+          </li>
+          <li class="flex flex-col items-center gap-2 group">
+            <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">React</span>
+            <img src="/icons/react.png" alt="React" class="w-12 h-12 object-contain group-hover:-translate-y-1 transition-transform" />
+          </li>
+          <li class="flex flex-col items-center gap-2 group">
+            <span class="text-[9px] font-bold text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors uppercase tracking-widest text-center">Node.js</span>
+            <img src="/icons/nodejs.png" alt="Node.js" class="w-12 h-12 object-contain group-hover:-translate-y-1 transition-transform" />
+          </li>
+        </ul>
+      </div>
+
+      {/* ========================================= */}
+      {/* CORE DISCIPLINES - COMPRESSED GAP         */}
+      {/* ========================================= */}
+      <div class="w-full max-w-2xl border-t border-zinc-200/50 dark:border-zinc-800/50 pt-8 flex flex-col items-center">
+        <h3 class="text-[10px] font-black tracking-[0.3em] uppercase text-zinc-400 dark:text-zinc-500 mb-8">
+          Core Disciplines
+        </h3>
+        
+        <div class="flex justify-center items-center gap-12 md:gap-24 w-full">
+          
+          <div class="flex flex-col items-center gap-4 group">
+            <span class="text-[9px] font-black text-zinc-900 dark:text-white tracking-widest uppercase">Shotokan Do</span>
+            <img src="/icons/shotokankarateinternational.png" alt="Shotokan Karate" class="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-500" />
+          </div>
+
+          <div class="flex flex-col items-center gap-4 group">
+            <span class="text-[9px] font-black text-zinc-900 dark:text-white tracking-widest uppercase">Psychology</span>
+            <img src="/icons/psychology.png" alt="Behavioral Psychology" class="w-14 h-14 object-contain group-hover:scale-110 transition-transform duration-500" />
+          </div>
+
+        </div>
       </div>
 
     </div>
