@@ -9,10 +9,15 @@ const pathname = Astro.url.pathname;
 const isHome = pathname === '/' || pathname === '/index.html' || pathname === '';
 ---
 
-<html lang="en" style="color-scheme: light dark;">
+{/* Removed the hardcoded style from here! */}
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    {/* Explicitly tell browsers we support both, but we will control it via JS */}
+    <meta name="color-scheme" content="light dark" />
+    
     <title>{title}</title>
     <ClientRouter />
     
@@ -20,12 +25,15 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     
+    {/* UPGRADED: Dynamically syncs the browser's native engine with our Tailwind engine */}
     <script is:inline>
       const applyTheme = () => {
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme') === 'light') {
           document.documentElement.classList.remove('dark');
+          document.documentElement.style.colorScheme = 'light';
         } else {
           document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
         }
       };
       applyTheme();
@@ -45,20 +53,16 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
     <nav class="w-full fixed top-0 z-40 bg-[#F8F9FA]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-500">
       <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between">
         
-        {/* Left Side: MOBILE Hamburger Button */}
         <button id="mobile-menu-open" class="md:hidden p-2 -ml-2 text-zinc-900 dark:text-white">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
 
-        {/* Center/Left: Logo / Home Button */}
         <a href="/" id="desktop-home-link" class="text-zinc-900 dark:text-white font-black tracking-[0.2em] uppercase text-sm hover:opacity-70 transition-opacity shrink-0">
           CK // Vault
         </a>
         
-        {/* Right Side: DESKTOP Links */}
         <div class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
           
-          {/* CATEGORY FILTERS (Homepage Only) */}
           {isHome && (
             <>
               <button class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</button>
@@ -70,13 +74,11 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
             </>
           )}
 
-          {/* GLOBAL PAGES */}
           {isHome && <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-2"></div>}
           
           <a href="/about" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
           <a href="/contact" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
 
-          {/* Theme Toggle */}
           <button class="theme-toggle-btn ml-4 p-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity">
             <svg class="w-4 h-4 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"></svg>
           </button>
@@ -131,7 +133,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
     {/* ========================================= */}
     <footer class="w-full relative overflow-hidden bg-white dark:bg-[#0A0A0A] border-t border-zinc-200/50 dark:border-zinc-800/50 pt-20 pb-10 transition-colors duration-500 mt-auto z-10">
       
-      {/* Massive Faint Watermark Text */}
       <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full overflow-hidden pointer-events-none select-none opacity-[0.03] dark:opacity-[0.02] flex justify-center z-0">
         <span class="text-[18vw] font-black tracking-tighter leading-none whitespace-nowrap text-zinc-900 dark:text-white">
           CHATHURA
@@ -140,7 +141,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
 
       <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row justify-between gap-16 md:gap-8">
         
-        {/* Left: Branding & Status */}
         <div class="flex flex-col items-start max-w-sm">
           <a href="/" class="text-zinc-900 dark:text-white font-black tracking-[0.3em] uppercase text-xl mb-6 hover:opacity-70 transition-opacity">
             CK // Vault
@@ -154,7 +154,6 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
           </div>
         </div>
 
-        {/* Right: Quick Links Grid */}
         <div class="flex gap-16 md:gap-24">
           <div class="flex flex-col gap-5 text-xs font-bold tracking-[0.2em] uppercase">
             <h4 class="text-zinc-900 dark:text-white mb-2 border-b border-zinc-200 dark:border-zinc-800 pb-4">Sitemap</h4>
@@ -173,12 +172,10 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
 
       </div>
 
-      {/* Bottom Bar: Copyright & Back To Top */}
       <div class="max-w-7xl mx-auto px-6 md:px-12 mt-20 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-500 relative z-10 border-t border-zinc-200/50 dark:border-zinc-800/50 pt-8">
         <p>© {new Date().getFullYear()} Chathura Kulathunga. All Rights Reserved.</p>
         
         <button id="back-to-top" class="hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-3 group cursor-pointer">
-          {/* THE FIX: h-[1px] is now officially h-px! */}
           <span class="w-8 h-px bg-zinc-400 group-hover:bg-zinc-900 dark:group-hover:bg-white transition-colors"></span>
           Back To Top
           <svg class="w-4 h-4 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
@@ -268,6 +265,10 @@ const isHome = pathname === '/' || pathname === '/index.html' || pathname === ''
             document.documentElement.classList.toggle("dark");
             const isDark = document.documentElement.classList.contains("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
+            
+            // UPGRADED: Force the browser color-scheme to update immediately!
+            document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+            
             updateIcons();
           });
         });
