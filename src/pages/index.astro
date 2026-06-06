@@ -49,27 +49,28 @@ import Layout from '../layouts/Layout.astro';
   {/* ========================================= */}
   <section class="relative z-30 w-full px-0 md:px-12 lg:px-24 pb-16 -mt-32 md:-mt-48 lg:mt-16">
     
-    {/* UPGRADED: Added scroll-smooth so it glides naturally on release! */}
-    <div id="archive-gallery" class="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 md:gap-6 px-6 md:px-0 pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar cursor-grab active:cursor-grabbing select-none">
+    {/* UPGRADED: Added will-change-scroll for GPU acceleration during swipes */}
+    <div id="archive-gallery" class="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 md:gap-6 px-6 md:px-0 pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar cursor-grab active:cursor-grabbing select-none will-change-scroll">
       
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
-        <img src="/a.jpg" alt="Archive A" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer" draggable="false" />
+      {/* UPGRADED: Added loading="lazy" decoding="async" transform-gpu to all images to fix the 1-minute browser freeze! */}
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+        <img src="/a.jpg" alt="Archive A" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
-        <img src="/b.jpg" alt="Archive B" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer" draggable="false" />
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+        <img src="/b.jpg" alt="Archive B" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
-        <img src="/c.jpg" alt="Archive C" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer" draggable="false" />
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+        <img src="/c.jpg" alt="Archive C" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
-        <img src="/d.jpg" alt="Archive D" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer" draggable="false" />
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+        <img src="/d.jpg" alt="Archive D" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
-        <img src="/e.jpg" alt="Archive E" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer" draggable="false" />
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+        <img src="/e.jpg" alt="Archive E" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
     </div>
@@ -79,12 +80,18 @@ import Layout from '../layouts/Layout.astro';
   {/* DISCIPLINE NAVIGATION PROMPT              */}
   {/* ========================================= */}
   <div class="w-full flex justify-center pb-24 relative z-20">
-    <div class="flex flex-col items-center gap-6 opacity-60 hover:opacity-100 transition-opacity duration-300">
-      <p class="text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-zinc-900 dark:text-white text-center">
-        <span class="block lg:hidden">Access Disciplines Via Menu</span>
-        <span class="hidden lg:block">Explore Skill Sectors Above</span>
-      </p>
-      <div class="w-px h-16 bg-zinc-900 dark:bg-white animate-pulse"></div>
+    <div class="flex flex-col items-center gap-5 opacity-90 hover:opacity-100 transition-opacity duration-300">
+      
+      {/* UPGRADED: Frosted glass pill guarantees contrast over the dark suit in light mode! */}
+      <div class="bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-md px-6 py-3 rounded-full border border-zinc-200/50 dark:border-zinc-800/50 shadow-xl">
+        <p class="text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-zinc-900 dark:text-white text-center">
+          <span class="block lg:hidden">Access Disciplines Via Menu</span>
+          <span class="hidden lg:block">Explore Skill Sectors Above</span>
+        </p>
+      </div>
+
+      {/* UPGRADED: Added a drop-shadow glow to the line so it remains visible against dark backgrounds */}
+      <div class="w-px h-16 bg-zinc-900 dark:bg-white animate-pulse drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] dark:drop-shadow-[0_0_8px_rgba(0,0,0,0.8)]"></div>
     </div>
   </div>
 
@@ -156,7 +163,6 @@ import Layout from '../layouts/Layout.astro';
         isDown = true;
         isDragging = false;
         
-        // UPGRADED: Instantly remove smooth scrolling while the mouse is down so it perfectly follows your hand!
         gallery.classList.remove('snap-mandatory', 'scroll-smooth'); 
         
         startX = e.pageX - gallery.offsetLeft;
@@ -165,13 +171,11 @@ import Layout from '../layouts/Layout.astro';
 
       gallery.addEventListener('mouseleave', () => {
         isDown = false;
-        // Turn the glide back on
         gallery.classList.add('snap-mandatory', 'scroll-smooth');
       });
 
       gallery.addEventListener('mouseup', () => {
         isDown = false;
-        // Turn the glide back on when releasing the mouse
         gallery.classList.add('snap-mandatory', 'scroll-smooth');
       });
 
@@ -181,7 +185,6 @@ import Layout from '../layouts/Layout.astro';
         isDragging = true; 
         const x = e.pageX - gallery.offsetLeft;
         
-        // UPGRADED: Changed multiplier from 2 to 1.5 for a softer, more premium pull
         const walk = (x - startX) * 1.5; 
         gallery.scrollLeft = scrollLeft - walk;
       });
