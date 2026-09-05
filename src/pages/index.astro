@@ -7,7 +7,7 @@ import Layout from '../layouts/Layout.astro';
   {/* ========================================= */}
   {/* 50/50 DESKTOP + SEAMLESS OVERLAY MOBILE   */}
   {/* ========================================= */}
-  <section class="relative w-full min-h-[100svh] lg:min-h-[90vh] flex flex-col lg:flex-row overflow-hidden -mt-28 pt-28 border-b border-zinc-200/50 dark:border-zinc-800/50">
+  <section class="relative w-full min-h-svh lg:min-h-[90vh] flex flex-col lg:flex-row overflow-hidden -mt-28 pt-28 border-b border-zinc-200/50 dark:border-zinc-800/50">
     
     <div class="w-full lg:w-1/2 relative z-20 flex flex-col justify-center items-start text-left px-8 md:px-16 lg:px-24 py-8 md:py-16 bg-transparent lg:bg-[#F5F5F5] lg:dark:bg-[#1A1A1A] transition-colors duration-500 lg:border-r lg:border-zinc-200/50 lg:dark:border-zinc-800/50">
       
@@ -35,7 +35,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
     <div class="absolute inset-0 lg:relative lg:inset-auto lg:w-1/2 bg-transparent lg:bg-[#F8F9FA] lg:dark:bg-[#121212] flex items-end justify-center z-10 overflow-hidden pointer-events-none">
-      <div class="absolute inset-x-0 top-0 h-[60%] bg-gradient-to-b from-[#F8F9FA]/80 to-transparent dark:from-[#121212]/90 dark:to-transparent lg:hidden z-10 pointer-events-none"></div>
+      <div class="absolute inset-x-0 top-0 h-[60%] bg-linear-to-b from-[#F8F9FA]/80 to-transparent dark:from-[#121212]/90 dark:to-transparent lg:hidden z-10 pointer-events-none"></div>
       <img 
         src="/Chathura-Kulathunga-2025.jpg" 
         alt="Chathura Kulathunga" 
@@ -52,23 +52,23 @@ import Layout from '../layouts/Layout.astro';
     <div id="archive-gallery" class="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 md:gap-6 px-6 md:px-0 pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar cursor-grab active:cursor-grabbing select-none will-change-scroll">
       
       {/* UPGRADED: Grayscale removed for full color! Added lazy loading & transform-gpu so the phone doesn't freeze! */}
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-[4/5] snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
         <img src="/a.jpg" alt="Archive A" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-[4/5] snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
         <img src="/b.jpg" alt="Archive B" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-[4/5] snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
         <img src="/c.jpg" alt="Archive C" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-[4/5] snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
         <img src="/d.jpg" alt="Archive D" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
-      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-[4/5] snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
+      <div class="relative min-w-[65vw] sm:min-w-[45vw] lg:min-w-0 aspect-4/5 snap-center overflow-hidden border-2 border-zinc-200 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-900 group shadow-2xl lg:shadow-none">
         <img src="/e.jpg" alt="Archive E" loading="lazy" decoding="async" class="gallery-img w-full h-full object-cover transition-all duration-700 group-hover:scale-105 cursor-pointer transform-gpu" draggable="false" />
       </div>
 
@@ -97,7 +97,7 @@ import Layout from '../layouts/Layout.astro';
   {/* ========================================= */}
   {/* FRAMED LIGHTBOX SYSTEM                    */}
   {/* ========================================= */}
-  <div id="gallery-lightbox" class="fixed inset-0 z-[100] hidden bg-zinc-900/95 dark:bg-black/95 backdrop-blur-md flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+  <div id="gallery-lightbox" class="lightbox fixed inset-0 z-100 hidden bg-zinc-900/95 dark:bg-black/95 backdrop-blur-md items-center justify-center p-4 opacity-0 transition-opacity duration-300">
     
     <div class="relative flex flex-col items-end">
       <button id="close-lightbox" class="mb-3 text-white/50 hover:text-white transition-all duration-300 cursor-pointer p-2 z-50 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm shadow-xl">
@@ -209,6 +209,9 @@ import Layout from '../layouts/Layout.astro';
 <style>
   .drop-shadow-3xl {
     filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.4));
+  }
+  .lightbox:not(.hidden) {
+    display: flex;
   }
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
