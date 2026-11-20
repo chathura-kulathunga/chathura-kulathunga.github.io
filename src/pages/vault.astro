@@ -1,171 +1,586 @@
 ---
 import { sanityClient } from 'sanity:client';
-import imageUrlBuilder from '@sanity/image-url';
-import Layout from '../layouts/Layout.astro'; 
+import Layout from '../layouts/Layout.astro';
+import { optimizedImg } from '../lib/sanity';
 
-const builder = imageUrlBuilder(sanityClient);
-function urlFor(source: any) {
-  return builder.image(source);
-}
+const [
+  projects,
+  labs,
+  milestones,
+  robotics,
+  music,
+  psychology,
+  credentials,
+] = await Promise.all([
+  sanityClient.fetch(`*[_type == "softwareProject" && defined(slug.current) && isVisible != false] | order(coalesce(displayOrder, 999) asc, _createdAt desc)`),
+  sanityClient.fetch(`*[_type == "cyberLab" && defined(slug.current) && isVisible != false] | order(coalesce(displayOrder, 999) asc, _createdAt desc)`),
+  sanityClient.fetch(`*[_type == "dojoMilestone" && defined(slug.current) && isVisible != false] | order(coalesce(displayOrder, 999) asc, date desc)`),
+  sanityClient.fetch(`*[_type == "roboticsProject" && defined(slug.current) && isVisible != false] | order(coalesce(displayOrder, 999) asc, _createdAt desc)`),
+  sanityClient.fetch(`*[_type == "musicProject" && defined(slug.current) && isVisible != false] | order(coalesce(displayOrder, 999) asc, _createdAt desc)`),
+  sanityClient.fetch(`*[_type == "psychologyEntry" && defined(slug.current) && isVisible != false] | order(coalesce(displayOrder, 999) asc, date desc)`),
+  sanityClient.fetch(`*[_type == "credential" && isVisible != false] | order(coalesce(displayOrder, 999) asc, sortDate desc, _createdAt desc)`),
+]);
 
-const projects = await sanityClient.fetch(`*[_type == "softwareProject"]`);
-const labs = await sanityClient.fetch(`*[_type == "cyberLab"]`);
-const milestones = await sanityClient.fetch(`*[_type == "dojoMilestone"] | order(date desc)`);
+const sectorOverview = [
+  { id: 'software', title: 'Software Architecture', tag: 'Engineering', count: projects.length, desc: 'Full-stack web systems, desktop apps, and mobile deployments.' },
+  { id: 'cybersecurity', title: 'Offensive Security', tag: 'Cybersec', count: labs.length, desc: 'Vulnerability research, network labs, and penetration testing writeups.' },
+  { id: 'robotics', title: 'Hardware & Robotics', tag: 'Embedded', count: robotics.length, desc: 'ESP32, Arduino, wireless telemetry, and physical sensor builds.' },
+  { id: 'sports', title: 'Shotokan Karate', tag: '1st Dan', count: milestones.length, desc: 'Black belt grading milestones, seminars, and dojo leadership.' },
+  { id: 'music', title: 'Music & Audio', tag: 'Sound', count: music.length, desc: 'Electric lead guitar recordings, tone rigs, and custom speaker builds.' },
+  { id: 'psychology', title: 'Behavioral Science', tag: 'Psychology', count: psychology.length, desc: 'Applied psychology notes, counseling insights, and behavioral UX.' },
+  { id: 'credentials', title: 'Credentials & Certs', tag: 'Verified', count: credentials.length, desc: 'Academic diplomas, networking & security certifications, and awards.' },
+];
+
+const vaultTabs = [
+  { id: 'overview', label: 'All Sectors' },
+  { id: 'software', label: 'Software' },
+  { id: 'cybersecurity', label: 'Cybersec' },
+  { id: 'robotics', label: 'Robotics' },
+  { id: 'sports', label: 'Sports' },
+  { id: 'music', label: 'Music' },
+  { id: 'psychology', label: 'Psychology' },
+  { id: 'credentials', label: 'Credentials' },
+];
 ---
 
 <Layout title="The Vault | CK">
-  
-  <section class="max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32 min-h-screen" id="content-container">
-    
-    <div id="view-default" class="content-view text-center animate-fade-in mt-12">
-       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">The Master Vault.</h2>
-       <p class="text-zinc-500 dark:text-zinc-400">Select a discipline from the navigation bar above to load the architecture.</p>
+
+  <section class="max-w-7xl mx-auto px-6 md:px-12 py-10 md:py-16 min-h-screen" id="content-container">
+
+    {/* Instant 0ms In-Page Sector Switcher */}
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-10 border-b border-zinc-200/70 dark:border-zinc-800/70 hide-scrollbar">
+      {vaultTabs.map((tab) => (
+        <button
+          type="button"
+          data-vault-pill={tab.id}
+          class="vault-pill px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-all cursor-pointer border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+        >
+          {tab.label}
+        </button>
+      ))}
     </div>
 
+    {/* OVERVIEW */}
+    <div id="view-overview" class="content-view">
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">The Master Vault.</h1>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Select a sector below to inspect live builds, lab reports, credentials, and discipline records.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sectorOverview.map((sec) => (
+          <button
+            type="button"
+            data-vault-jump={sec.id}
+            class="text-left group p-7 rounded-2xl bg-white dark:bg-[#161616] border border-zinc-200/80 dark:border-zinc-800 hover:border-zinc-900 dark:hover:border-white transition-all duration-300 cursor-pointer flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500">{sec.tag}</span>
+                <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300">{sec.count}</span>
+              </div>
+              <h2 class="text-xl font-black text-zinc-900 dark:text-white mb-2 group-hover:translate-x-1 transition-transform">{sec.title}</h2>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6">{sec.desc}</p>
+            </div>
+            <div class="h-0.5 w-10 bg-zinc-900 dark:bg-white group-hover:w-24 transition-all duration-500"></div>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* SOFTWARE */}
     <div id="view-software" class="content-view hidden">
       <div class="mb-12">
         <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Software Architecture.</h2>
-        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Enterprise-grade systems, full-stack web applications, and React Native mobile deployments.</p>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Enterprise-grade systems, full-stack web applications, and mobile deployments.</p>
       </div>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-        {projects.map((item: any) => (
-          <li class="group cursor-pointer">
-            <a href={`/project/${item.slug?.current}`} class="block w-full">
-              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm">
-                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
-                {item.mainImage && (
-                  <img src={urlFor(item.mainImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                )}
-              </div>
-              <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 block">Software</span>
-                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors">{item.title}</h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.executiveSummary || "View full system documentation."}</p>
-                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-32 transition-all duration-700 ease-out"></div>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {projects.length > 0 ? (
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          {projects.map((item: any) => (
+            <li class="group">
+              <a href={`/project/${item.slug.current}`} class="block w-full">
+                <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-5 relative shadow-sm">
+                  {item.mainImage && (
+                    <img src={optimizedImg(item.mainImage, 900, 675)} alt={item.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  )}
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 block">Software</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:opacity-70 transition-opacity">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.description || 'View full system documentation.'}</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-28 transition-all duration-500"></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-zinc-500 py-16">No visible software entries yet. Publish or enable items in Sanity Studio.</p>
+      )}
     </div>
 
+    {/* CYBERSECURITY */}
     <div id="view-cybersecurity" class="content-view hidden">
       <div class="mb-12">
         <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Offensive Security.</h2>
         <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Vulnerability research, network penetration testing, and ethical hacking lab reports.</p>
       </div>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-        {labs.map((item: any) => (
-          <li class="group cursor-pointer">
-            <a href={`/labs/${item.slug?.current}`} class="block w-full">
-              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm border border-red-500/10">
-                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
-                {item.coverImage && (
-                  <img src={urlFor(item.coverImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale" />
-                )}
-              </div>
-              <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-red-500 mb-3 block">Cybersec</span>
-                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-red-500 transition-colors">{item.title}</h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.description || "View full vulnerability report."}</p>
-                <div class="h-0.5 w-12 bg-red-500 group-hover:w-32 transition-all duration-700 ease-out"></div>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {labs.length > 0 ? (
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          {labs.map((item: any) => (
+            <li class="group">
+              <a href={`/labs/${item.slug.current}`} class="block w-full">
+                <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-5 relative shadow-sm border border-red-500/15">
+                  {item.coverImage && (
+                    <img src={optimizedImg(item.coverImage, 900, 675)} alt={item.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  )}
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-red-500 mb-2 block">Cybersec</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:text-red-500 transition-colors">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.executiveSummary || 'View full vulnerability report.'}</p>
+                <div class="h-0.5 w-12 bg-red-500 group-hover:w-28 transition-all duration-500"></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-zinc-500 py-16">No visible cybersecurity lab entries yet.</p>
+      )}
     </div>
 
+    {/* ROBOTICS */}
+    <div id="view-robotics" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Hardware & Robotics.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Embedded systems, wireless telemetry prototypes, and microcontroller builds.</p>
+      </div>
+      {robotics.length > 0 ? (
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          {robotics.map((item: any) => (
+            <li class="group">
+              <a href={`/robotics/${item.slug.current}`} class="block w-full">
+                <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-5 relative shadow-sm">
+                  {item.coverImage && (
+                    <img src={optimizedImg(item.coverImage, 900, 675)} alt={item.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  )}
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 block">Robotics</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:opacity-70 transition-opacity">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.summary || 'View hardware build documentation.'}</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-28 transition-all duration-500"></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-zinc-500 py-16">Hardware builds are syncing from Sanity Studio.</p>
+      )}
+    </div>
+
+    {/* SPORTS / DOJO */}
     <div id="view-sports" class="content-view hidden">
       <div class="mb-12">
         <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Shotokan Karate.</h2>
-        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">1st Dan grading records, milestone ceremonies, and active Sensei progression.</p>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">1st Dan grading records, international seminars, and active Sensei milestones.</p>
       </div>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-        {milestones.map((item: any) => (
-          <li class="group cursor-pointer">
-            <a href={`/dojo/${item.slug?.current}`} class="block w-full">
-              <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-6 relative shadow-sm">
-                <div class="absolute inset-0 bg-zinc-900/0 group-hover:bg-zinc-900/10 dark:group-hover:bg-white/5 transition-colors duration-500 z-10"></div>
-                {item.coverImage && (
-                  <img src={urlFor(item.coverImage).width(1000).height(750).url()} alt="Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                )}
-              </div>
-              <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3 block">Sports</span>
-                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors">{item.title}</h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4">View 1st Dan milestone records inside.</p>
-                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-32 transition-all duration-700 ease-out"></div>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {milestones.length > 0 ? (
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          {milestones.map((item: any) => (
+            <li class="group">
+              <a href={`/dojo/${item.slug.current}`} class="block w-full">
+                <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-5 relative shadow-sm">
+                  {item.coverImage && (
+                    <img src={optimizedImg(item.coverImage, 900, 675)} alt={item.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  )}
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-500 mb-2 block">Sports</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:opacity-70 transition-opacity">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.shortSummary || 'View 1st Dan milestone records inside.'}</p>
+                <div class="h-0.5 w-12 bg-amber-500 group-hover:w-28 transition-all duration-500"></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-zinc-500 py-16">No visible dojo milestones yet.</p>
+      )}
     </div>
 
-    <div id="view-robotics" class="content-view hidden text-center py-24">
-       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Hardware Engineering.</h2>
-       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+    {/* MUSIC */}
+    <div id="view-music" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Music & Audio.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Electric lead guitar sessions, distortion rigs, and custom acoustic enclosures.</p>
+      </div>
+      {music.length > 0 ? (
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          {music.map((item: any) => (
+            <li class="group">
+              <a href={`/music/${item.slug.current}`} class="block w-full">
+                <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-5 relative shadow-sm">
+                  {item.coverImage && (
+                    <img src={optimizedImg(item.coverImage, 900, 675)} alt={item.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  )}
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 block">Music</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:opacity-70 transition-opacity">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.summary || 'View audio session notes.'}</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-28 transition-all duration-500"></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-zinc-500 py-16">Audio sessions are syncing from Sanity Studio.</p>
+      )}
     </div>
-    <div id="view-music" class="content-view hidden text-center py-24">
-       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Audio Engineering.</h2>
-       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+
+    {/* PSYCHOLOGY */}
+    <div id="view-psychology" class="content-view hidden">
+      <div class="mb-12">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Behavioral Science.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Applied psychology, human behavior, and cognitive design principles.</p>
+      </div>
+      {psychology.length > 0 ? (
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+          {psychology.map((item: any) => (
+            <li class="group">
+              <a href={`/psychology/${item.slug.current}`} class="block w-full">
+                <div class="w-full aspect-4/3 bg-zinc-200 dark:bg-zinc-900 rounded-3xl overflow-hidden mb-5 relative shadow-sm">
+                  {item.coverImage && (
+                    <img src={optimizedImg(item.coverImage, 900, 675)} alt={item.title} loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  )}
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2 block">Psychology</span>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-3 group-hover:opacity-70 transition-opacity">{item.title}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">{item.summary || 'Read full behavioral writeup.'}</p>
+                <div class="h-0.5 w-12 bg-zinc-900 dark:bg-white group-hover:w-28 transition-all duration-500"></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-zinc-500 py-16">Behavioral science entries are syncing from Sanity Studio.</p>
+      )}
     </div>
-    <div id="view-psychology" class="content-view hidden text-center py-24">
-       <h2 class="text-3xl font-bold text-zinc-400 dark:text-zinc-500 mb-4">Behavioral Science.</h2>
-       <p class="text-zinc-500 dark:text-zinc-400">Database connection pending. Content will be synced shortly.</p>
+
+    {/* CREDENTIALS & CERTIFICATIONS */}
+    <div id="view-credentials" class="content-view hidden">
+      <div class="mb-10">
+        <h2 class="text-4xl font-black text-zinc-900 dark:text-white tracking-tight mb-4">Credentials & Honors.</h2>
+        <p class="text-zinc-500 dark:text-zinc-400 max-w-2xl">Verified diplomas, cybersecurity & networking certifications, psychology credentials, and championship records.</p>
+      </div>
+
+      {/* Category Sub-Filters */}
+      <div class="flex flex-wrap gap-2 mb-10">
+        {['all', 'cybersecurity', 'software', 'psychology', 'sports', 'robotics', 'music'].map((cat) => (
+          <button
+            type="button"
+            data-cert-filter={cat}
+            class={`cert-filter-btn px-3.5 py-1.5 rounded-md text-[10px] font-black uppercase tracking-[0.2em] border transition-colors cursor-pointer ${cat === 'all' ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-black dark:border-white' : 'border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {credentials.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {credentials.map((cert: any) => {
+            const allImgs = [
+              cert.certificateImage ? optimizedImg(cert.certificateImage, 1400) : null,
+              ...(cert.galleryImages || []).map((g: any) => optimizedImg(g, 1400)),
+            ].filter(Boolean);
+
+            return (
+              <div
+                data-cert-category={cert.category || 'software'}
+                class="cert-card flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-[#161616] border border-zinc-200/80 dark:border-zinc-800 transition-all hover:border-zinc-400 dark:hover:border-zinc-600"
+              >
+                <div>
+                  {cert.certificateImage && (
+                    <button
+                      type="button"
+                      data-cert-images={JSON.stringify(allImgs)}
+                      data-cert-title={cert.title}
+                      class="cert-preview-trigger block w-full aspect-16/10 mb-5 rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 cursor-pointer group relative"
+                    >
+                      <img
+                        src={optimizedImg(cert.certificateImage, 700, 440)}
+                        alt={cert.title}
+                        loading="lazy"
+                        decoding="async"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      {allImgs.length > 1 && (
+                        <span class="absolute bottom-2 right-2 px-2.5 py-1 rounded-full bg-black/75 text-white text-[10px] font-bold tracking-wider">
+                          +{allImgs.length - 1} more
+                        </span>
+                      )}
+                    </button>
+                  )}
+
+                  <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">
+                      {cert.dateLabel}
+                    </span>
+                    {cert.status === 'upcoming' ? (
+                      <span class="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">
+                        Upcoming
+                      </span>
+                    ) : (
+                      <span class="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
+                        {cert.category}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 class="text-lg font-bold text-zinc-900 dark:text-white leading-snug mb-1.5">
+                    {cert.title}
+                  </h3>
+                  {cert.issuer && (
+                    <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-3">{cert.issuer}</p>
+                  )}
+                  {cert.summary && (
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">{cert.summary}</p>
+                  )}
+                </div>
+
+                <div class="flex items-center gap-4 pt-4 mt-2 border-t border-zinc-100 dark:border-zinc-800/80">
+                  {allImgs.length > 0 && (
+                    <button
+                      type="button"
+                      data-cert-images={JSON.stringify(allImgs)}
+                      data-cert-title={cert.title}
+                      class="cert-preview-trigger text-[10px] font-black uppercase tracking-[0.2em] text-zinc-900 dark:text-white hover:opacity-70 transition-opacity cursor-pointer"
+                    >
+                      Inspect Proof →
+                    </button>
+                  )}
+                  {cert.verificationUrl && (
+                    <a
+                      href={cert.verificationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors ml-auto"
+                    >
+                      Verify ↗
+                    </a>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p class="text-zinc-500 py-16">Upload your certificates under "Credential & Certification" in Sanity Studio and they will appear here automatically.</p>
+      )}
     </div>
 
   </section>
 
+  {/* Multi-Image Credential Lightbox */}
+  <div id="cert-lightbox" class="fixed inset-0 z-100 hidden bg-black/95 backdrop-blur-md items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full flex flex-col items-center">
+      <div class="w-full flex items-center justify-between mb-4 text-white">
+        <p id="cert-lightbox-title" class="text-xs font-bold uppercase tracking-[0.2em] truncate pr-4"></p>
+        <button id="cert-lightbox-close" aria-label="Close preview" class="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <img id="cert-lightbox-img" src="" alt="Certificate Preview" class="max-h-[75vh] w-auto object-contain rounded-lg border border-zinc-800 shadow-2xl" />
+      <div id="cert-lightbox-thumbs" class="flex gap-2 mt-4 overflow-x-auto max-w-full py-1"></div>
+    </div>
+  </div>
+
   <script>
+    const validCategories = ['overview', 'software', 'robotics', 'cybersecurity', 'sports', 'music', 'psychology', 'credentials'];
+
     const setupVaultEngine = () => {
       const allViews = document.querySelectorAll('.content-view');
       const navLinks = document.querySelectorAll('.filter-nav-link');
+      const pills = document.querySelectorAll('.vault-pill');
+      const jumpCards = document.querySelectorAll('[data-vault-jump]');
 
-      const activateView = (targetCategory: string) => {
-        const validCategories = ['default', 'software', 'robotics', 'cybersecurity', 'sports', 'music', 'psychology'];
-        const safeCategory = validCategories.includes(targetCategory) ? targetCategory : 'default';
+      const activateView = (targetCategory: string, syncUrl = true) => {
+        const safeCategory = validCategories.includes(targetCategory) ? targetCategory : 'overview';
+        sessionStorage.setItem('vaultActiveTab', safeCategory);
 
-        navLinks.forEach(btn => {
-          btn.classList.remove('text-zinc-900', 'dark:text-white');
-          btn.classList.add('text-zinc-500');
-          if (btn.getAttribute('data-target') === safeCategory) {
-             btn.classList.remove('text-zinc-500');
-             btn.classList.add('text-zinc-900', 'dark:text-white');
-          }
+        if (syncUrl) {
+          const newUrl = safeCategory === 'overview' ? '/vault' : `/vault?sector=${safeCategory}`;
+          window.history.replaceState(null, '', newUrl);
+        }
+
+        navLinks.forEach((btn) => {
+          const isMatch = btn.getAttribute('data-target') === safeCategory;
+          btn.classList.toggle('text-zinc-900', isMatch);
+          btn.classList.toggle('dark:text-white', isMatch);
+          btn.classList.toggle('text-zinc-500', !isMatch);
         });
 
-        allViews.forEach(view => view.classList.add('hidden'));
+        pills.forEach((pill) => {
+          const isMatch = pill.getAttribute('data-vault-pill') === safeCategory;
+          pill.classList.toggle('bg-zinc-900', isMatch);
+          pill.classList.toggle('text-white', isMatch);
+          pill.classList.toggle('dark:bg-white', isMatch);
+          pill.classList.toggle('dark:text-black', isMatch);
+          pill.classList.toggle('border-zinc-900', isMatch);
+          pill.classList.toggle('dark:border-white', isMatch);
+        });
 
+        allViews.forEach((view) => view.classList.add('hidden'));
         const activeView = document.getElementById(`view-${safeCategory}`);
         if (activeView) {
-           activeView.classList.remove('hidden');
-           activeView.style.opacity = '0';
-           setTimeout(() => { 
-             activeView.style.opacity = '1'; 
-             activeView.style.transition = 'opacity 0.4s ease-in'; 
-           }, 10);
+          activeView.classList.remove('hidden');
         }
       };
 
-      // 1. Initialize view on load
-      const savedTab = sessionStorage.getItem('vaultActiveTab') || 'default';
-      activateView(savedTab);
-
-      // 2. Listen for clicks from the Global Nav Bar
-      window.addEventListener('vaultTabChange', (e: Event) => {
-         const customEvent = e as CustomEvent;
-         activateView(customEvent.detail);
+      pills.forEach((pill) => {
+        const el = pill as HTMLElement;
+        if (el.dataset.bound) return;
+        el.dataset.bound = 'true';
+        el.addEventListener('click', () => {
+          activateView(el.getAttribute('data-vault-pill') || 'overview');
+        });
       });
+
+      jumpCards.forEach((card) => {
+        const el = card as HTMLElement;
+        if (el.dataset.bound) return;
+        el.dataset.bound = 'true';
+        el.addEventListener('click', () => {
+          activateView(el.getAttribute('data-vault-jump') || 'overview');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Credential sub-category filtering
+      const certFilterBtns = document.querySelectorAll('.cert-filter-btn');
+      const certCards = document.querySelectorAll('.cert-card');
+      certFilterBtns.forEach((btn) => {
+        const el = btn as HTMLElement;
+        if (el.dataset.bound) return;
+        el.dataset.bound = 'true';
+        el.addEventListener('click', () => {
+          const filter = el.getAttribute('data-cert-filter') || 'all';
+          certFilterBtns.forEach((b) => {
+            const active = b.getAttribute('data-cert-filter') === filter;
+            b.classList.toggle('bg-zinc-900', active);
+            b.classList.toggle('text-white', active);
+            b.classList.toggle('border-zinc-900', active);
+            b.classList.toggle('dark:bg-white', active);
+            b.classList.toggle('dark:text-black', active);
+            b.classList.toggle('dark:border-white', active);
+          });
+          certCards.forEach((c) => {
+            const cat = c.getAttribute('data-cert-category');
+            c.classList.toggle('hidden', filter !== 'all' && cat !== filter);
+          });
+        });
+      });
+
+      // Credential lightbox
+      const lightbox = document.getElementById('cert-lightbox');
+      const lightboxImg = document.getElementById('cert-lightbox-img') as HTMLImageElement | null;
+      const lightboxTitle = document.getElementById('cert-lightbox-title');
+      const lightboxThumbs = document.getElementById('cert-lightbox-thumbs');
+      const closeBtn = document.getElementById('cert-lightbox-close');
+
+      const closeCertLightbox = () => {
+        lightbox?.classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+
+      document.querySelectorAll('.cert-preview-trigger').forEach((trigger) => {
+        const el = trigger as HTMLElement;
+        if (el.dataset.bound) return;
+        el.dataset.bound = 'true';
+        el.addEventListener('click', () => {
+          if (!lightbox || !lightboxImg || !lightboxTitle || !lightboxThumbs) return;
+          const imgs: string[] = JSON.parse(el.getAttribute('data-cert-images') || '[]');
+          if (!imgs.length) return;
+          lightboxTitle.textContent = el.getAttribute('data-cert-title') || '';
+          lightboxImg.src = imgs[0];
+          lightboxThumbs.innerHTML = '';
+
+          if (imgs.length > 1) {
+            imgs.forEach((src, i) => {
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = `w-14 h-10 rounded overflow-hidden border-2 cursor-pointer ${i === 0 ? 'border-white' : 'border-zinc-700 opacity-70 hover:opacity-100'}`;
+              btn.innerHTML = `<img src="${src}" class="w-full h-full object-cover" />`;
+              btn.onclick = () => {
+                lightboxImg.src = src;
+                Array.from(lightboxThumbs.children).forEach((child, idx) => {
+                  child.className = `w-14 h-10 rounded overflow-hidden border-2 cursor-pointer ${idx === i ? 'border-white' : 'border-zinc-700 opacity-70 hover:opacity-100'}`;
+                });
+              };
+              lightboxThumbs.appendChild(btn);
+            });
+          }
+
+          lightbox.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      if (closeBtn && !closeBtn.dataset.bound) {
+        closeBtn.dataset.bound = 'true';
+        closeBtn.addEventListener('click', closeCertLightbox);
+      }
+      if (lightbox && !lightbox.dataset.bound) {
+        lightbox.dataset.bound = 'true';
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) closeCertLightbox();
+        });
+      }
+
+      // Priority: URL ?sector= > sessionStorage > overview
+      const params = new URLSearchParams(window.location.search);
+      const urlSector = params.get('sector');
+      const initialTab = urlSector || 'overview';
+      activateView(initialTab, false);
+
+      // Deduplicated tab-change listener from navbar
+      if ((window as any).__ckVaultTabHandler) {
+        window.removeEventListener('vaultTabChange', (window as any).__ckVaultTabHandler);
+      }
+      (window as any).__ckVaultTabHandler = (e: Event) => {
+        const customEvent = e as CustomEvent;
+        activateView(customEvent.detail, true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      window.addEventListener('vaultTabChange', (window as any).__ckVaultTabHandler);
     };
 
-    document.addEventListener('astro:page-load', setupVaultEngine);
+    if (!(window as any).__ckVaultPageLoadBound) {
+      (window as any).__ckVaultPageLoadBound = true;
+      document.addEventListener('astro:page-load', () => {
+        if (window.location.pathname.startsWith('/vault')) {
+          setupVaultEngine();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.getElementById('cert-lightbox')?.classList.add('hidden');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    if (window.location.pathname.startsWith('/vault')) {
+      setupVaultEngine();
+    }
   </script>
 
-</Layout>
+  <style>
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    #cert-lightbox:not(.hidden) {
+      display: flex;
+    }
+  </style>
 
-<style>
-  .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+</Layout>

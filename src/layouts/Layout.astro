@@ -1,12 +1,23 @@
 ---
-import '../styles/global.css'; 
-import { ClientRouter } from 'astro:transitions'; 
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 
 const { title = "CK // Vault" } = Astro.props;
 
 const pathname = Astro.url.pathname;
-// Show filters on Home AND the new Vault page
-const showFilters = pathname === '/' || pathname === '/index.html' || pathname === '' || pathname.startsWith('/vault');
+const isHome = pathname === '/' || pathname === '/index.html' || pathname === '';
+const isVault = pathname.startsWith('/vault');
+const showFilters = isHome || isVault;
+
+const sectors = [
+  { id: 'software', label: 'Software' },
+  { id: 'robotics', label: 'Robotics' },
+  { id: 'cybersecurity', label: 'Cybersec' },
+  { id: 'sports', label: 'Sports' },
+  { id: 'music', label: 'Music' },
+  { id: 'psychology', label: 'Psychology' },
+  { id: 'credentials', label: 'Certs' },
+];
 ---
 
 <html lang="en">
@@ -15,16 +26,17 @@ const showFilters = pathname === '/' || pathname === '/index.html' || pathname =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
-    
-    {/* UPGRADED: Forces the browser to download your hero portrait instantly! */}
-    <link rel="preload" as="image" href="/Chathura-Kulathunga-2025.jpg" fetchpriority="high">
+
+    {isHome && (
+      <link rel="preload" as="image" href="/Chathura-Kulathunga-2025.jpg" fetchpriority="high" />
+    )}
 
     <ClientRouter />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+
     <script is:inline>
       const applyTheme = () => {
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme') === 'light') {
@@ -41,42 +53,72 @@ const showFilters = pathname === '/' || pathname === '/index.html' || pathname =
 
     <style is:global>
       body { font-family: 'Inter', sans-serif; }
+      #nav-progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        width: 0%;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transition: width 220ms ease-out, opacity 200ms ease-out;
+      }
+      #nav-progress-bar.active {
+        opacity: 1;
+        width: 78%;
+      }
+      #nav-progress-bar.done {
+        opacity: 0;
+        width: 100%;
+      }
     </style>
   </head>
-  
-  <body class="bg-[#F8F9FA] text-zinc-900 dark:bg-[#121212] dark:text-zinc-200 antialiased min-h-screen flex flex-col transition-colors duration-500 overflow-x-hidden">
-    
-    <nav class="w-full fixed top-0 z-40 bg-[#F8F9FA]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-500">
-      <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between">
-        
-        <button id="mobile-menu-open" class="md:hidden p-2 -ml-2 text-zinc-900 dark:text-white">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+
+  <body class="bg-[#F8F9FA] text-zinc-900 dark:bg-[#121212] dark:text-zinc-200 antialiased min-h-screen flex flex-col transition-colors duration-300 overflow-x-hidden">
+
+    {/* Instant 0ms Navigation Feedback Bar */}
+    <div id="nav-progress-bar" class="bg-zinc-900 dark:bg-white"></div>
+
+    <nav class="w-full fixed top-0 z-40 bg-[#F8F9FA]/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-300">
+      <div class="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between gap-4">
+
+        <button id="mobile-menu-open" aria-label="Open menu" class="md:hidden p-2 -ml-2 text-zinc-900 dark:text-white cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
 
-        <a href="/" id="desktop-home-link" class="text-zinc-900 dark:text-white font-black tracking-[0.2em] uppercase text-sm hover:opacity-70 transition-opacity shrink-0">
+        <a href="/" id="desktop-home-link" data-astro-prefetch="load" class="text-zinc-900 dark:text-white font-black tracking-[0.2em] uppercase text-sm hover:opacity-70 transition-opacity shrink-0">
           CK // Vault
         </a>
-        
-        <div class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-          
-          {showFilters && (
+
+        <div class="hidden md:flex items-center gap-5 lg:gap-6 text-[11px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+          {showFilters ? (
             <>
-              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</a>
-              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="robotics">Robotics</a>
-              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="cybersecurity">Cybersec</a>
-              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="sports">Sports</a>
-              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="music">Music</a>
-              <a href="/vault" class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="psychology">Psychology</a>
+              {sectors.map((s) => (
+                <a
+                  href={`/vault?sector=${s.id}`}
+                  data-astro-prefetch="load"
+                  class="filter-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors whitespace-nowrap"
+                  data-target={s.id}
+                >
+                  {s.label}
+                </a>
+              ))}
+              <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-1"></div>
+            </>
+          ) : (
+            <>
+              <a href="/vault" data-astro-prefetch="load" class="global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors">Vault</a>
+              <a href="/vault?sector=credentials" data-astro-prefetch="load" class="global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors">Certs</a>
+              <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-1"></div>
             </>
           )}
 
-          {showFilters && <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-2"></div>}
-          
-          <a href="/about" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
-          <a href="/contact" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
+          <a href="/about" data-astro-prefetch="load" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
+          <a href="/contact" data-astro-prefetch="load" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
 
-          <button class="theme-toggle-btn ml-4 p-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity">
-            <svg class="w-4 h-4 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"></svg>
+          <button aria-label="Toggle theme" class="theme-toggle-btn ml-2 p-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity cursor-pointer">
+            <svg class="w-4 h-4 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
           </button>
         </div>
 
@@ -84,43 +126,42 @@ const showFilters = pathname === '/' || pathname === '/index.html' || pathname =
     </nav>
 
     <div id="mobile-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-    
+
     <div id="mobile-drawer" class="fixed top-0 left-0 w-64 h-full bg-[#F8F9FA] dark:bg-[#121212] z-50 transform -translate-x-full transition-transform duration-300 shadow-2xl flex flex-col border-r border-zinc-200/50 dark:border-zinc-800/50">
-      
       <div class="flex items-center justify-between p-6 border-b border-zinc-200/50 dark:border-zinc-800/50 shrink-0">
-        <button id="mobile-menu-close" class="p-2 -ml-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button id="mobile-menu-close" aria-label="Close menu" class="p-2 -ml-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <button class="theme-toggle-btn p-2 -mr-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity">
-          <svg class="w-5 h-5 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"></svg>
+        <button aria-label="Toggle theme" class="theme-toggle-btn p-2 -mr-2 text-zinc-900 dark:text-white hover:opacity-70 transition-opacity cursor-pointer">
+          <svg class="w-5 h-5 theme-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
         </button>
       </div>
 
-      <div class="flex flex-col gap-6 p-8 text-sm font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 overflow-y-auto hide-scrollbar grow">
-        
-        <a href="/" id="mobile-home-btn" class="global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors">Home</a>
-        <a href="/about" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
-        <a href="/contact" class={`global-nav-link border-b border-zinc-200/50 dark:border-zinc-800/50 pb-6 mb-2 hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
-        
-        {showFilters && (
-          <>
-            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="software">Software</a>
-            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="robotics">Robotics</a>
-            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="cybersecurity">Cybersec</a>
-            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="sports">Sports</a>
-            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="music">Music</a>
-            <a href="/vault" class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors" data-target="psychology">Psychology</a>
-          </>
-        )}
+      <div class="flex flex-col gap-5 p-8 text-sm font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400 overflow-y-auto grow">
+        <a href="/" id="mobile-home-btn" data-astro-prefetch="load" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${isHome ? 'text-zinc-900 dark:text-white' : ''}`}>Home</a>
+        <a href="/vault" data-astro-prefetch="load" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${isVault ? 'text-zinc-900 dark:text-white' : ''}`}>The Vault</a>
+        <a href="/about" data-astro-prefetch="load" class={`global-nav-link hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/about') ? 'text-zinc-900 dark:text-white' : ''}`}>About</a>
+        <a href="/contact" data-astro-prefetch="load" class={`global-nav-link border-b border-zinc-200/50 dark:border-zinc-800/50 pb-5 mb-1 hover:text-zinc-900 dark:hover:text-white transition-colors ${pathname.includes('/contact') ? 'text-zinc-900 dark:text-white' : ''}`}>Contact</a>
+
+        <span class="text-[10px] tracking-[0.3em] text-zinc-400 dark:text-zinc-600">Sectors</span>
+        {sectors.map((s) => (
+          <a
+            href={`/vault?sector=${s.id}`}
+            data-astro-prefetch="load"
+            class="filter-nav-link text-left w-full hover:text-zinc-900 dark:hover:text-white transition-colors"
+            data-target={s.id}
+          >
+            {s.label}
+          </a>
+        ))}
       </div>
-      
     </div>
 
     <main class="grow w-full pt-28 z-0 relative">
       <slot />
     </main>
 
-    <footer class="w-full relative overflow-hidden bg-white dark:bg-[#0A0A0A] border-t border-zinc-200/50 dark:border-zinc-800/50 pt-15 pb-10 transition-colors duration-500 mt-auto z-10">
+    <footer class="w-full relative overflow-hidden bg-white dark:bg-[#0A0A0A] border-t border-zinc-200/50 dark:border-zinc-800/50 pt-15 pb-10 transition-colors duration-300 mt-auto z-10">
       <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full overflow-hidden pointer-events-none select-none opacity-[0.03] dark:opacity-[0.02] flex justify-center z-0">
         <span class="text-[18vw] font-black tracking-tighter leading-none whitespace-nowrap text-zinc-900 dark:text-white">
           CHATHURA
@@ -139,14 +180,15 @@ const showFilters = pathname === '/' || pathname === '/index.html' || pathname =
           <div class="flex flex-col gap-5 text-xs font-bold tracking-[0.2em] uppercase">
             <h4 class="text-zinc-900 dark:text-white mb-2 border-b border-zinc-200 dark:border-zinc-800 pb-4">Sitemap</h4>
             <a href="/" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Home</a>
+            <a href="/vault" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">The Vault</a>
             <a href="/about" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">The Architect</a>
             <a href="/contact" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a>
           </div>
           <div class="flex flex-col gap-5 text-xs font-bold tracking-[0.2em] uppercase">
             <h4 class="text-zinc-900 dark:text-white mb-2 border-b border-zinc-200 dark:border-zinc-800 pb-4">Network</h4>
-            <a href="https://github.com/chathura-kulathunga" target="_blank" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">GitHub</a>
-            <a href="https://linkedin.com/in/chathura-kulathunga-b75817276" target="_blank" class="text-zinc-500 hover:text-[#0A66C2] transition-colors">LinkedIn</a>
-            <a href="https://www.instagram.com/_chathura_pramuditha_/" target="_blank" class="text-zinc-500 hover:text-[#E1306C] transition-colors">Instagram</a>
+            <a href="https://github.com/chathura-kulathunga" target="_blank" rel="noopener noreferrer" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">GitHub</a>
+            <a href="https://linkedin.com/in/chathura-kulathunga-b75817276" target="_blank" rel="noopener noreferrer" class="text-zinc-500 hover:text-[#0A66C2] transition-colors">LinkedIn</a>
+            <a href="https://www.instagram.com/_chathura_pramuditha_/" target="_blank" rel="noopener noreferrer" class="text-zinc-500 hover:text-[#E1306C] transition-colors">Instagram</a>
           </div>
         </div>
       </div>
@@ -161,94 +203,93 @@ const showFilters = pathname === '/' || pathname === '/index.html' || pathname =
     </footer>
 
     <script>
-      const setupLayoutScripts = () => {
+      const closeMenuGlobal = () => {
+        document.getElementById('mobile-drawer')?.classList.add('-translate-x-full');
+        document.getElementById('mobile-overlay')?.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+      };
+
+      const setupLayoutDOM = () => {
         const openBtn = document.getElementById('mobile-menu-open');
         const closeBtn = document.getElementById('mobile-menu-close');
         const drawer = document.getElementById('mobile-drawer');
         const overlay = document.getElementById('mobile-overlay');
-        const navLinks = document.querySelectorAll('.filter-nav-link'); 
-        const globalLinks = document.querySelectorAll('.global-nav-link'); 
-        const homeBtn = document.getElementById('mobile-home-btn');
-        const desktopHome = document.getElementById('desktop-home-link');
+        const navLinks = document.querySelectorAll('.filter-nav-link');
+        const globalLinks = document.querySelectorAll('.global-nav-link');
+        const backToTopBtn = document.getElementById('back-to-top');
+        const themeButtons = document.querySelectorAll('.theme-toggle-btn');
 
         const openMenu = () => {
           drawer?.classList.remove('-translate-x-full');
           overlay?.classList.remove('opacity-0', 'pointer-events-none');
-          document.body.style.overflow = 'hidden'; 
+          document.body.style.overflow = 'hidden';
         };
 
-        const closeMenu = () => {
-          drawer?.classList.add('-translate-x-full');
-          overlay?.classList.add('opacity-0', 'pointer-events-none');
-          document.body.style.overflow = ''; 
-        };
+        if (openBtn && !openBtn.dataset.bound) {
+          openBtn.dataset.bound = 'true';
+          openBtn.addEventListener('click', openMenu);
+        }
+        if (closeBtn && !closeBtn.dataset.bound) {
+          closeBtn.dataset.bound = 'true';
+          closeBtn.addEventListener('click', closeMenuGlobal);
+        }
+        if (overlay && !overlay.dataset.bound) {
+          overlay.dataset.bound = 'true';
+          overlay.addEventListener('click', closeMenuGlobal);
+        }
 
-        openBtn?.addEventListener('click', openMenu);
-        closeBtn?.addEventListener('click', closeMenu);
-        overlay?.addEventListener('click', closeMenu);
-
-        const triggerHomeReset = (e: Event) => {
-          sessionStorage.setItem('vaultActiveTab', 'default');
-          if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
-             e.preventDefault();
-             window.scrollTo({ top: 0, behavior: 'smooth' });
-             closeMenu();
-             window.dispatchEvent(new Event('vaultHomeReset')); 
-          }
-        };
-
-        homeBtn?.addEventListener('click', triggerHomeReset);
-        desktopHome?.addEventListener('click', triggerHomeReset);
-
-        navLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            const targetCategory = link.getAttribute('data-target') || 'default';
+        navLinks.forEach((link) => {
+          const el = link as HTMLElement;
+          if (el.dataset.bound) return;
+          el.dataset.bound = 'true';
+          el.addEventListener('click', (e) => {
+            const targetCategory = el.getAttribute('data-target') || 'overview';
             sessionStorage.setItem('vaultActiveTab', targetCategory);
-     
+
             if (window.location.pathname === '/vault' || window.location.pathname === '/vault/') {
               e.preventDefault();
               window.dispatchEvent(new CustomEvent('vaultTabChange', { detail: targetCategory }));
-            }  
-            if (window.innerWidth < 768) closeMenu();
-          });
-        });
-
-        globalLinks.forEach(link => {
-          link.addEventListener('click', () => {
-             if (window.innerWidth < 768) closeMenu();
-          });
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 768) closeMenu();
-        });
-
-        const backToTopBtn = document.getElementById('back-to-top');
-        backToTopBtn?.addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        const themeButtons = document.querySelectorAll('.theme-toggle-btn');
-        const updateIcons = () => {
-          const isDark = document.documentElement.classList.contains("dark");
-          themeButtons.forEach(btn => {
-            const icon = btn.querySelector('.theme-icon');
-            if(icon) {
-              if (isDark) {
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
-              } else {
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
-              }
             }
+            if (window.innerWidth < 768) closeMenuGlobal();
+          });
+        });
+
+        globalLinks.forEach((link) => {
+          const el = link as HTMLElement;
+          if (el.dataset.bound) return;
+          el.dataset.bound = 'true';
+          el.addEventListener('click', () => {
+            if (window.innerWidth < 768) closeMenuGlobal();
+          });
+        });
+
+        if (backToTopBtn && !backToTopBtn.dataset.bound) {
+          backToTopBtn.dataset.bound = 'true';
+          backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+
+        const updateIcons = () => {
+          const isDark = document.documentElement.classList.contains('dark');
+          themeButtons.forEach((btn) => {
+            const icon = btn.querySelector('.theme-icon');
+            if (!icon) return;
+            icon.innerHTML = isDark
+              ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>'
+              : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
           });
         };
 
-        themeButtons.forEach(btn => {
-          btn.addEventListener('click', () => {
-            document.documentElement.classList.toggle("dark");
-            const isDark = document.documentElement.classList.contains("dark");
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-            document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        themeButtons.forEach((btn) => {
+          const el = btn as HTMLElement;
+          if (el.dataset.bound) return;
+          el.dataset.bound = 'true';
+          el.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
             updateIcons();
           });
         });
@@ -256,7 +297,35 @@ const showFilters = pathname === '/' || pathname === '/index.html' || pathname =
         updateIcons();
       };
 
-      document.addEventListener('astro:page-load', setupLayoutScripts);
+      // Bind global window/document lifecycle listeners ONCE
+      if (!(window as any).__ckLayoutBound) {
+        (window as any).__ckLayoutBound = true;
+
+        document.addEventListener('astro:before-preparation', () => {
+          const bar = document.getElementById('nav-progress-bar');
+          if (bar) {
+            bar.classList.remove('done');
+            bar.classList.add('active');
+          }
+          closeMenuGlobal();
+        });
+
+        document.addEventListener('astro:page-load', () => {
+          const bar = document.getElementById('nav-progress-bar');
+          if (bar) {
+            bar.classList.remove('active');
+            bar.classList.add('done');
+            setTimeout(() => bar.classList.remove('done'), 250);
+          }
+          setupLayoutDOM();
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth >= 768) closeMenuGlobal();
+        });
+      }
+
+      setupLayoutDOM();
     </script>
   </body>
 </html>
