@@ -1,0 +1,18 @@
+---
+import { optimizedImg } from '../lib/sanity';
+
+const { node } = Astro.props as any;
+const src = node?.asset ? optimizedImg(node, 1200) : '';
+---
+
+{src && (
+  <figure class="my-8">
+    <img
+      src={src}
+      alt={node.alt || 'Article visual'}
+      loading="lazy"
+      decoding="async"
+      class="w-full h-auto rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-lg"
+    />
+  </figure>
+)}

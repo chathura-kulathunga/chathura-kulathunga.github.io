@@ -1,12 +1,9 @@
 ---
 import { sanityClient } from 'sanity:client';
-import imageUrlBuilder from '@sanity/image-url';
-import { PortableText } from 'astro-portabletext';
-import Layout from '../../layouts/Layout.astro'; 
+import VaultDetailLayout from '../../components/VaultDetailLayout.astro';
 
 export async function getStaticPaths() {
-  const projects = await sanityClient.fetch(`*[_type == "softwareProject" && defined(slug.current)]`);
-  
+  const projects = await sanityClient.fetch(`*[_type == "softwareProject" && defined(slug.current) && isVisible != false]`);
   return projects.map((project: any) => ({
     params: { slug: project.slug.current },
     props: { project },
@@ -14,62 +11,18 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props as any;
-
-const builder = imageUrlBuilder(sanityClient);
-function urlFor(source: any) {
-  return builder.image(source);
-}
 ---
 
-<Layout title={`${project.title} | The Vault`}>
-  
-  <div class="max-w-4xl mx-auto px-8 md:px-16 py-12">
-    
-    <a href="/" class="inline-flex items-center text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white mb-12 transition-colors duration-500 uppercase tracking-wider">
-      ← Back to Vault
-    </a>
-
-    <header class="mb-12">
-      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-6 tracking-tight transition-colors duration-500">{project.title}</h1>
-      
-      <div class="flex flex-wrap gap-2 mb-8">
-        {project.techStack && project.techStack.map((tech: string) => (
-          <span class="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 px-4 py-1.5 rounded-md text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider transition-colors duration-500">
-            {tech}
-          </span>
-        ))}
-      </div>
-    </header>
-
-    {project.mainImage && (
-      <div class="w-full mb-16 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl transition-colors duration-500">
-        <img 
-          src={urlFor(project.mainImage).width(1200).height(600).url()} 
-          alt="Project Cover" 
-          class="w-full h-auto object-cover"
-        />
-      </div>
-    )}
-
-    {project.body && (
-      <article class="prose max-w-none transition-colors duration-500
-                      [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-zinc-900 dark:[&>h1]:text-white [&>h1]:mt-12 [&>h1]:mb-6
-                      [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-zinc-800 dark:[&>h2]:text-zinc-100 [&>h2]:mt-10 [&>h2]:mb-4
-                      [&>p]:text-zinc-600 dark:[&>p]:text-zinc-400 [&>p]:leading-relaxed [&>p]:mb-6
-                      [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>ul]:text-zinc-600 dark:[&>ul]:text-zinc-400
-                      [&>li]:mb-2 [&>strong]:text-zinc-900 dark:[&>strong]:text-white">
-        <PortableText value={project.body} />
-      </article>
-    )}
-
-    {project.githubUrl && (
-      <div class="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-500">
-        <a href={project.githubUrl} target="_blank" class="inline-flex items-center px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-black font-bold rounded-lg hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors duration-500">
-          View GitHub Repository
-        </a>
-      </div>
-    )}
-
-  </div>
-  
-</Layout>
+<VaultDetailLayout
+  title={project.title}
+  pageTitle={`${project.title} | Software | CK Vault`}
+  sectorLabel="Software Architecture"
+  sectorSlug="software"
+  tags={project.techStack}
+  coverImage={project.mainImage}
+  summary={project.description}
+  summaryLabel="Architecture Summary"
+  body={project.body}
+  primaryLink={project.githubUrl ? { label: 'View GitHub Repository', url: project.githubUrl } : undefined}
+  secondaryLink={project.liveUrl ? { label: 'Open Live Demo', url: project.liveUrl } : undefined}
+/>
