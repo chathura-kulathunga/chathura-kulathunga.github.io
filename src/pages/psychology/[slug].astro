@@ -1,0 +1,29 @@
+---
+import { sanityClient } from 'sanity:client';
+import VaultDetailLayout from '../../components/VaultDetailLayout.astro';
+
+export async function getStaticPaths() {
+  const items = await sanityClient.fetch(`*[_type == "psychologyEntry" && defined(slug.current) && isVisible != false]`);
+  return items.map((item: any) => ({
+    params: { slug: item.slug.current },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props as any;
+const formattedDate = item.date
+  ? new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : '';
+---
+
+<VaultDetailLayout
+  title={item.title}
+  pageTitle={`${item.title} | Behavioral Science | CK Vault`}
+  sectorLabel="Behavioral Science"
+  sectorSlug="psychology"
+  dateLabel={formattedDate}
+  coverImage={item.coverImage}
+  summary={item.summary}
+  summaryLabel="Abstract"
+  body={item.body}
+/>

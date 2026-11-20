@@ -1,12 +1,9 @@
 ---
 import { sanityClient } from 'sanity:client';
-import imageUrlBuilder from '@sanity/image-url';
-import { PortableText } from 'astro-portabletext';
-import Layout from '../../layouts/Layout.astro'; 
+import VaultDetailLayout from '../../components/VaultDetailLayout.astro';
 
 export async function getStaticPaths() {
-  const labs = await sanityClient.fetch(`*[_type == "cyberLab" && defined(slug.current)]`);
-  
+  const labs = await sanityClient.fetch(`*[_type == "cyberLab" && defined(slug.current) && isVisible != false]`);
   return labs.map((lab: any) => ({
     params: { slug: lab.slug.current },
     props: { lab },
@@ -14,61 +11,18 @@ export async function getStaticPaths() {
 }
 
 const { lab } = Astro.props as any;
-
-const builder = imageUrlBuilder(sanityClient);
-function urlFor(source: any) {
-  return builder.image(source);
-}
 ---
 
-<Layout title={`${lab.title} | Cyber Lab`}>
-  
-  <div class="max-w-4xl mx-auto px-8 md:px-16 py-12">
-    
-    <a href="/" class="inline-flex items-center text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white mb-12 transition-colors duration-500 uppercase tracking-wider">
-      ← Back to Vault
-    </a>
-
-    <header class="mb-12">
-      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-6 tracking-tight transition-colors duration-500">{lab.title}</h1>
-      
-      <div class="flex flex-wrap gap-2 mb-8">
-        {lab.toolsUsed && lab.toolsUsed.map((tool: string) => (
-          <span class="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 px-4 py-1.5 rounded-md text-xs font-bold text-red-700 dark:text-red-400 uppercase tracking-wider transition-colors duration-500">
-            {tool}
-          </span>
-        ))}
-      </div>
-    </header>
-
-    {lab.coverImage && (
-      <div class="w-full mb-16 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl transition-colors duration-500">
-        <img 
-          src={urlFor(lab.coverImage).width(1200).height(600).url()} 
-          alt="Terminal Screenshot" 
-          class="w-full h-auto object-cover"
-        />
-      </div>
-    )}
-
-    {lab.executiveSummary && (
-      <div class="mb-12 p-6 bg-zinc-100 dark:bg-zinc-900 border-l-4 border-zinc-900 dark:border-zinc-100 transition-colors duration-500">
-        <h3 class="text-sm font-bold text-zinc-900 dark:text-white mb-2 uppercase tracking-widest">Executive Summary</h3>
-        <p class="text-zinc-700 dark:text-zinc-300 leading-relaxed font-medium">{lab.executiveSummary}</p>
-      </div>
-    )}
-
-    {lab.body && (
-      <article class="prose max-w-none transition-colors duration-500
-                      [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-zinc-900 dark:[&>h1]:text-white [&>h1]:mt-12 [&>h1]:mb-6
-                      [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-zinc-800 dark:[&>h2]:text-zinc-100 [&>h2]:mt-10 [&>h2]:mb-4
-                      [&>p]:text-zinc-600 dark:[&>p]:text-zinc-400 [&>p]:leading-relaxed [&>p]:mb-6
-                      [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>ul]:text-zinc-600 dark:[&>ul]:text-zinc-400
-                      [&>li]:mb-2 [&>strong]:text-zinc-900 dark:[&>strong]:text-white">
-        <PortableText value={lab.body} />
-      </article>
-    )}
-
-  </div>
-  
-</Layout>
+<VaultDetailLayout
+  title={lab.title}
+  pageTitle={`${lab.title} | Cyber Lab | CK Vault`}
+  sectorLabel="Offensive Security"
+  sectorSlug="cybersecurity"
+  accent="red"
+  tags={lab.toolsUsed}
+  coverImage={lab.coverImage}
+  summary={lab.executiveSummary}
+  summaryLabel="Executive Summary"
+  body={lab.body}
+  primaryLink={lab.reportUrl ? { label: 'View Full Writeup', url: lab.reportUrl } : undefined}
+/>

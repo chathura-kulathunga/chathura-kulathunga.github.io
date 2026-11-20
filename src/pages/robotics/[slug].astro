@@ -1,0 +1,27 @@
+---
+import { sanityClient } from 'sanity:client';
+import VaultDetailLayout from '../../components/VaultDetailLayout.astro';
+
+export async function getStaticPaths() {
+  const items = await sanityClient.fetch(`*[_type == "roboticsProject" && defined(slug.current) && isVisible != false]`);
+  return items.map((item: any) => ({
+    params: { slug: item.slug.current },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props as any;
+---
+
+<VaultDetailLayout
+  title={item.title}
+  pageTitle={`${item.title} | Robotics | CK Vault`}
+  sectorLabel="Hardware & Robotics"
+  sectorSlug="robotics"
+  tags={item.hardwareStack}
+  coverImage={item.coverImage}
+  summary={item.summary}
+  summaryLabel="System Overview"
+  body={item.body}
+  primaryLink={item.githubUrl ? { label: 'View Schematics / Repo', url: item.githubUrl } : undefined}
+/>

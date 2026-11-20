@@ -27,7 +27,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <a href="/vault" class="inline-flex items-center gap-6 group cursor-pointer w-fit lg:drop-shadow-none drop-shadow-md">
-          <span class="text-xs font-black tracking-[0.3em] uppercase text-zinc-900 dark:text-white group-hover:opacity-70 transition-opacity">Access The Vault</span>
+          <a href="/vault" data-astro-prefetch="load" class="inline-flex items-center gap-6 group cursor-pointer w-fit lg:drop-shadow-none drop-shadow-md"></a>
           <div class="w-12 h-0.5 bg-zinc-900 dark:bg-white group-hover:w-24 transition-all duration-500 ease-out"></div>
         </a>
 
@@ -115,17 +115,20 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
   const setupGalleryEngine = () => {
-    // 1. LIGHTBOX LOGIC
     const lightbox = document.getElementById('gallery-lightbox');
-    const lightboxImg = document.getElementById('lightbox-image') as HTMLImageElement;
+    const lightboxImg = document.getElementById('lightbox-image') as HTMLImageElement | null;
     const closeBtn = document.getElementById('close-lightbox');
     const galleryTriggers = document.querySelectorAll('.gallery-img');
+    const gallery = document.getElementById('archive-gallery');
+
+    if (!gallery || gallery.dataset.bound) return;
+    gallery.dataset.bound = 'true';
 
     const openModal = (src: string) => {
       if (!lightbox || !lightboxImg) return;
       lightboxImg.src = src;
       lightbox.classList.remove('hidden');
-      void lightbox.offsetWidth; // Force reflow
+      void lightbox.offsetWidth;
       lightbox.classList.remove('opacity-0');
       lightboxImg.classList.remove('scale-95');
       lightboxImg.classList.add('scale-100');
@@ -133,77 +136,80 @@ import Layout from '../layouts/Layout.astro';
     };
 
     const closeModal = () => {
-      if (!lightbox || !lightboxImg) return;
+      if (!lightbox || !lightboxImg || lightbox.classList.contains('hidden')) return;
       lightbox.classList.add('opacity-0');
       lightboxImg.classList.remove('scale-100');
       lightboxImg.classList.add('scale-95');
       setTimeout(() => {
         lightbox.classList.add('hidden');
         document.body.style.overflow = '';
-      }, 300); 
+      }, 300);
     };
 
-    if (closeBtn && lightbox) {
-      closeBtn.addEventListener('click', closeModal);
-      lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeModal(); 
-      });
-    }
+    closeBtn?.addEventListener('click', closeModal);
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeModal();
+    });
 
-    // 2. ULTRA-SMOOTH KINETIC DRAG LOGIC
-    const gallery = document.getElementById('archive-gallery');
     let isDown = false;
     let isDragging = false;
-    let startX: number;
-    let scrollLeft: number;
+    let startX = 0;
+    let scrollLeft = 0;
 
-    if (gallery) {
-      gallery.addEventListener('mousedown', (e) => {
-        isDown = true;
-        isDragging = false;
-        
-        gallery.classList.remove('snap-mandatory', 'scroll-smooth'); 
-        
-        startX = e.pageX - gallery.offsetLeft;
-        scrollLeft = gallery.scrollLeft;
+    gallery.addEventListener('mousedown', (e) => {
+      isDown = true;
+      isDragging = false;
+      gallery.classList.remove('snap-mandatory', 'scroll-smooth');
+      startX = e.pageX - gallery.offsetLeft;
+      scrollLeft = gallery.scrollLeft;
+    });
+
+    const endDrag = () => {
+      isDown = false;
+      gallery.classList.add('snap-mandatory', 'scroll-smooth');
+    };
+
+    gallery.addEventListener('mouseleave', endDrag);
+    gallery.addEventListener('mouseup', endDrag);
+
+    gallery.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - gallery.offsetLeft;
+      if (Math.abs(x - startX) > 5) {
+        isDragging = true;
+      }
+      const walk = (x - startX) * 1.5;
+      gallery.scrollLeft = scrollLeft - walk;
+    });
+
+    galleryTriggers.forEach((img) => {
+      img.addEventListener('click', (e) => {
+        if (isDragging) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        const target = e.target as HTMLImageElement;
+        openModal(target.src);
       });
+    });
 
-      gallery.addEventListener('mouseleave', () => {
-        isDown = false;
-        gallery.classList.add('snap-mandatory', 'scroll-smooth');
-      });
-
-      gallery.addEventListener('mouseup', () => {
-        isDown = false;
-        gallery.classList.add('snap-mandatory', 'scroll-smooth');
-      });
-
-      gallery.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        isDragging = true; 
-        const x = e.pageX - gallery.offsetLeft;
-        
-        const walk = (x - startX) * 1.5; 
-        gallery.scrollLeft = scrollLeft - walk;
-      });
-
-      // 3. SMART CLICK HANDLER
-      galleryTriggers.forEach(img => {
-        img.addEventListener('click', (e) => {
-          if (isDragging) {
-            e.preventDefault();
-            e.stopPropagation();
-            return;
-          }
-          const target = e.target as HTMLImageElement;
-          openModal(target.src);
-        });
+    if (!(window as any).__ckHomeEscBound) {
+      (window as any).__ckHomeEscBound = true;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.getElementById('close-lightbox')?.click();
+        }
       });
     }
   };
 
-  document.addEventListener('astro:page-load', setupGalleryEngine);
+  if (!(window as any).__ckHomePageLoadBound) {
+    (window as any).__ckHomePageLoadBound = true;
+    document.addEventListener('astro:page-load', setupGalleryEngine);
+  }
+  setupGalleryEngine();
 </script>
 
 <style>
